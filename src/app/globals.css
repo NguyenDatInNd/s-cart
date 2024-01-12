@@ -1,3 +1,150 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ant-float-btn-body {
+  background-color: #d9a1a3 !important;
+  transition: background-color 0.5s ease;
+}
+
+.ant-float-btn-body:hover {
+  background-color: #ffffff !important;
+}
+
+.icon-send {
+  color: #ffffff;
+  transition: background-color 0.5s ease;
+}
+
+.btn-send:hover .icon-send {
+  color: #d9a1a3 !important;
+}
+
+.subtext-footer {
+  cursor: pointer;
+  transition: color 0.5s ease;
+}
+
+.subtext-footer:hover {
+  color: #d9a1a3 !important;
+}
+
+.ImageContainer {
+  position: relative;
+  overflow: hidden;
+}
+
+.ImageContainer img {
+  transition: transform 0.5s ease;
+}
+
+.ImageContainer:hover img {
+  transform: scale(1.1);
+}
+
+.card-products {
+  transition: all 0.4s ease;
+}
+
+.card-products:hover {
+  background-color: #ffffff !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.icon-circle {
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.card-products:hover .icon-circle {
+  animation: fadeInScale 0.4s ease forwards;
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.card-products .icon-circle:first-child {
+  animation-delay: 0s;
+}
+
+.card-products .icon-circle:last-child {
+  animation-delay: 0.15s;
+}
+
+.circle-heart {
+  border-width: 1px;
+  border-color: #e9da5d !important;
+  transition: all 0.3s ease;
+}
+
+.circle-heart:hover {
+  background-color: #f5f5f5 !important;
+  border-color: #ee3c42 !important;
+  border-width: 1px;
+}
+
+.circle-heart:hover .icon-heart {
+  color: #ee3c42 !important;
+}
+
+.circle-swap {
+  border-width: 1px;
+  border-color: #d9a1a3 !important;
+  transition: all 0.3s ease;
+}
+
+.circle-swap:hover {
+  background-color: #e9da5d !important;
+  border-color: #e9da5d !important;
+  border-width: 1px;
+}
+
+.circle-swap:hover .icon-swap {
+  color: #333 !important;
+}
+
+.btn-add-to-cart {
+  cursor: pointer;
+  border-width: 1px;
+  transition: all 0.3s ease;
+}
+
+.btn-add-to-cart:hover {
+  background-color: #f5f5f5 !important;
+  border-color: #d9a1a3 !important;
+  color: #ee3c42 !important;
+}
+
+.text-banner-detail {
+  font-size: 47px;
+  color: #ffffff;
+  text-shadow: 3px -1px 8px rgb(29 27 27);
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.review-form .ant-form-item-label {
+  text-align: center !important;
+}
+
+.ant-popconfirm-buttons .ant-btn-primary {
+  background-color: #1677ff !important;
+}

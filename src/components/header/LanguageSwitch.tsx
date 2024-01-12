@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Select, Space } from "antd";
 import Image from 'next/image'

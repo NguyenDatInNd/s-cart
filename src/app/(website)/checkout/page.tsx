@@ -1,0 +1,274 @@
+'use client'
+
+import React, { useState, useMemo } from 'react';
+import { Form, Input, Popconfirm, Space, Table, notification, Button, Select, Row, Col, Checkbox } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import { GiShoppingBag } from "react-icons/gi";
+import Image from "next/image"
+import Link from 'next/link';
+import BreadcrumbApp from '@/components/breadcrumb/BreadcrumbApp';
+import { GoPersonFill } from "react-icons/go";
+import { FaPhone, FaEarthAmericas } from "react-icons/fa6";
+import { BsBodyText } from "react-icons/bs";
+import { CloseCircleFilled, MailFilled } from '@ant-design/icons';
+import { TbNotes } from "react-icons/tb";
+import { RiCoupon3Fill } from "react-icons/ri";
+import { FaShippingFast } from "react-icons/fa";
+import { MdOutlinePayment } from "react-icons/md";
+import { countries } from '@/components/country';
+import { IOrder } from '@/interfaces';
+import { useStoreCart } from '@/store/storeCart';
+
+
+const Checkout: React.FC = () => {
+    const [form] = Form.useForm();
+
+    const onFinish = (values: any) => {
+        console.log(values)
+    };
+
+    const { order } = useStoreCart();
+    const [couponCode, setCouponCode] = useState<string>('');
+    const [appliedCoupon, setAppliedCoupon] = useState<number>(0);
+
+    const total = order.products.reduce((total, item) => total + item.price[0] * item.quantity, 0);
+    const tax = (total * 0.1).toFixed(2);
+    const totalAll = (Number(total) + Number(tax) - Number(appliedCoupon)).toFixed(2);
+
+    const handleApplyCoupon = () => {
+        if (couponCode === 'ABC') {
+            setAppliedCoupon(100);
+            setCouponCode('');
+        } else {
+
+        }
+    };
+
+    const columns: ColumnsType<IOrder> = [
+        {
+            title: 'No.',
+            key: 'order',
+            render: (text, record, index) => <a>{index + 1}</a>,
+        },
+        {
+            title: 'Name',
+            dataIndex: 'product',
+            key: 'product',
+            render: ({ name, code, src }) => (
+                <>
+                    <div className='flex gap-4 mb-3'>
+                        <Link className='ImageContainer' href={`/detail/${code.replace(/\s+/g, '-').toLowerCase()}`}>
+                            <Image src={src} width={100} height={80} alt={name} />
+                        </Link>
+
+                        <Link className='h-6 mt-7' href={`/detail/${code.replace(/\s+/g, '-').toLowerCase()}`}>
+                            <p className="subtext-footer capitalize text-base">{name}</p>
+                        </Link>
+                    </div>
+
+                    <div className='flex flex-col gap-1'>
+                        <p className='text-base uppercase'>SKU: {code}</p>
+                        <div>
+                            {/* {attributes && Object.keys(attributes).map((key) => (
+                                <span key={key} className='text-sm mr-2'>{key}: {attributes[key]}</span>
+                            ))} */}
+                        </div>
+                    </div>
+                </>
+
+            )
+        },
+        {
+            title: 'Price',
+            dataIndex: 'price',
+            key: 'price',
+            render: (_, { price }) => (
+                <div className='flex items-center gap-4'>
+                    <p className='text-[#15151580] font-extralight text-sm line-through'>{price[1]}</p>
+                    <p className='text-[#d9a1a3] text-sm'>{price[0]}</p>
+                </div>
+            )
+        },
+        {
+            title: 'Quantity',
+            key: 'quantity',
+            dataIndex: 'quantity',
+            render: (quantity) => <p className='text-sm'>{quantity}</p>
+        },
+        {
+            title: 'Subtotal',
+            key: 'total',
+            render: (_, record) => {
+                const { quantity, price } = record;
+                const subtotal = price[1] * quantity;
+                return (
+                    <Space className='w-full flex justify-between' size='large' direction='horizontal'>
+                        <p className='ml-3'>${subtotal}</p>
+                    </Space>
+                );
+            },
+            width: 200,
+        },
+    ];
+
+    return (
+        <>
+            <BreadcrumbApp />
+
+            <div className='px-[285px] py-28 bg-white' >
+                <div className="text-xl flex items-center gap-3 mb-5">
+                    <GiShoppingBag /> Demo S-Cart : Free Laravel eCommerce
+                </div>
+                <Table bordered columns={columns} dataSource={order.products} pagination={false} />
+
+                <div className='mt-14'>
+                    <Form
+                        form={form}
+                        onFinish={onFinish}
+                        layout='vertical'
+                        autoComplete="off"
+                        requiredMark={false}
+                    >
+                        <div className='flex gap-10'>
+                            <div className='flex flex-col w-1/2'>
+                                <Space direction='horizontal'>
+                                    <Form.Item
+                                        name="first_name"
+                                        label={<p className='flex items-center gap-1'><GoPersonFill /> First name</p>}
+                                    >
+                                        <Input placeholder='First name' />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="last_name"
+                                        label={<p className='flex items-center gap-1'><GoPersonFill /> Last name</p>}
+                                    >
+                                        <Input placeholder='Last name' />
+                                    </Form.Item>
+                                </Space>
+
+                                <Space direction='horizontal'>
+                                    <Form.Item
+                                        name="email"
+                                        label={<p className='flex items-center gap-1'><MailFilled /> Email</p>}
+                                    >
+                                        <Input placeholder='Email' />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="phone"
+                                        label={<p className='flex items-center gap-1'><FaPhone /> Phone</p>}
+                                        rules={[{ required: true }, { type: 'number', warningOnly: true }, { type: 'string', min: 6 }]}
+                                    >
+                                        <Input placeholder='Phone' />
+                                    </Form.Item>
+                                </Space>
+
+                                <Form.Item
+                                    name="country"
+                                    label={<p className='flex items-center gap-1'><FaEarthAmericas /> Country</p>}
+                                >
+                                    <Select
+                                        defaultValue=" "
+                                        options={countries}
+                                        placeholder='choose your country'
+                                        style={{ width: 370 }}
+                                    />
+                                </Form.Item>
+
+                                <Form.Item
+                                    name="address"
+                                    label={<p className='flex items-center gap-1'><BsBodyText />Address</p>}
+                                >
+                                    <Input style={{ width: 370 }} placeholder='Address...' />
+                                </Form.Item>
+
+                                <Form.Item
+                                    name="note"
+                                    label={<p className='flex items-center gap-1'><TbNotes />Note</p>}
+                                >
+                                    <Input.TextArea rows={3} style={{ width: 370 }} placeholder='Note...' />
+                                </Form.Item>
+                            </div>
+
+                            <div className='w-full ml-40 mt-20'>
+                                <Row className='text-sm content-start'>
+                                    <Col className='w-full h-12 flex pl-3 items-center justify-start border border-gray-300' span={17}>SubTotal</Col>
+                                    <Col className='w-full h-12 flex pr-3 border-l-0 items-center justify-end border border-gray-300' span={7}>${total.toFixed(2)}</Col>
+
+                                    <Col className='w-full h-12 flex pl-3 border-t-0 items-center justify-start border border-gray-300' span={17}>Tax</Col>
+                                    <Col className='w-full h-12 flex pr-3 border-l-0 border-t-0  items-center justify-end border border-gray-300' span={7}>${tax}</Col>
+
+                                    {appliedCoupon > 0 && <>
+                                        <Col className='w-full h-12 flex pl-3 border-t-0 items-center justify-start border border-gray-300' span={17}>Coupon/Discount</Col>
+                                        <Col className='w-full h-12 flex pr-3 border-l-0 border-t-0  items-center justify-end border border-gray-300' span={7}>${appliedCoupon.toFixed(2)}</Col>
+                                    </>}
+
+                                    <Col className='w-full h-12 bg-[#f5f3f3] flex pl-3 border-t-0 items-center justify-start border border-gray-300' span={17}>Total</Col>
+                                    <Col className='w-full h-12 bg-[#f5f3f3] flex pr-3 border-l-0 border-t-0  items-center justify-end border border-gray-300' span={7}>{totalAll}</Col>
+                                </Row>
+
+                                <div className='flex flex-col gap-1 mt-12'>
+                                    <div className='flex gap-2 text-base items-center'>
+                                        <p className='flex gap-1 items-center text-[#777777]'><RiCoupon3Fill /> Coupon</p>
+                                        {appliedCoupon > 0 &&
+                                            <p
+                                                onClick={() => {
+                                                    setCouponCode('')
+                                                    setAppliedCoupon(0)
+                                                }}
+                                                className='text-sm text-[#f95a5a] italic cursor-pointer'>(Remove coupon <CloseCircleFilled />)</p>}
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <Input
+                                            className='flex-1 h-8'
+                                            placeholder='Coupon code'
+                                            value={couponCode}
+                                            onChange={(e) => setCouponCode(e.target.value)}
+                                        />
+
+                                        <Button className='w-32 h-full uppercase text-center rounded-none' onClick={handleApplyCoupon}>
+                                            Apply
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                <div className='flex flex-col gap-16 mt-16'>
+                                    <div>
+                                        <p className='text-3xl uppercase flex gap-3 items-center mb-3'><FaShippingFast />shipping method</p>
+                                        <Checkbox className='text-base text-[#9b9b9b]'> Shipping Standard</Checkbox>
+                                    </div>
+
+                                    <div className='flex flex-col'>
+                                        <p className='text-3xl uppercase flex gap-3 items-center mb-3'><MdOutlinePayment />payment method</p>
+                                        <Checkbox >
+                                            <Image src='/banner/cash.png' width={200} height={80} alt='cash-method' />
+                                        </Checkbox>
+
+                                        <Checkbox className='text-base'>
+                                            <Image src='/banner/bank.png' width={200} height={80} alt='bank-method' />
+                                        </Checkbox>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <Form.Item>
+                            <div className='flex justify-end'>
+                                <Button htmlType="submit" className='h-16 w-44 bg-[#e9da5d] uppercase text-base flex justify-center items-center btn-add-to-cart rounded-none mt-5'>
+                                    checkout
+                                </Button>
+                            </div>
+                        </Form.Item>
+                    </Form>
+                </div>
+
+
+            </div >
+        </ >
+    )
+}
+
+export default Checkout

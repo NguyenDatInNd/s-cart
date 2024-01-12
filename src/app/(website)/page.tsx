@@ -1,21 +1,22 @@
 'use client'
 
 import FlaskSale from "@/components/flashSale/FlashSale"
-import HeaderApp from "@/components/header/HeaderApp"
+import NewProducts from "@/components/newProducts/NewProducts"
+import News from "@/components/news/News"
 import Slider from "@/components/slider/Slider"
-import { Layout } from "antd"
 
 const Home: React.FC = () => {
   return (
     <>
-      <HeaderApp />
+      <Slider />
 
-      <Layout className="">
-        <Slider />
-
+      <div className="px-[255px] bg-white">
         <FlaskSale />
-      </Layout>
 
+        <NewProducts />
+      </div>
+
+      <News />
     </>
   )
 }

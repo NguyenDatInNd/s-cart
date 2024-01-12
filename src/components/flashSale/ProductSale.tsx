@@ -1,10 +1,14 @@
 "use client"
+
 import { useEffect, useState } from 'react';
 import { Progress, Typography } from 'antd';
 const { Text } = Typography;
 import Image from 'next/image'
+import Link from 'next/link';
+import { IProduct } from '@/interfaces';
 
-const ProductSale: React.FC = () => {
+const ProductSale: React.FC<IProduct> = (props) => {
+    const { price, amount, name, src, code, attributes } = props;
     const [countdown, setCountdown] = useState({
         days: 0,
         hours: 0,
@@ -40,20 +44,29 @@ const ProductSale: React.FC = () => {
     return (
         <div className='flex flex-row h-64 w-[540px] rounded-3xl border-red-500 border-2'>
             <div className='flex items-center'>
-                <Image className='w-[180px] h-[145px]' src="/shop/dragon_fruit.png" width={200} height={150} alt='dragon-fruit' />
+                <Link href={`/detail/${code.replace(/\s+/g, '-').toLowerCase()}`} key={code}>
+                    <Image className='w-[180px] h-[145px]' src={src} width={200} height={150} alt={name} />
+
+                </Link>
+
             </div>
 
             <div className='flex items-center justify-between flex-col flex-1 py-7 px-5'>
-                <Typography.Title level={4}>Dragon Fruit</Typography.Title >
+                <Link href={`/detail/${code.replace(/\s+/g, '-').toLowerCase()}`} key={code}>
+                    <Typography.Title className='subtext-footer' level={4}>
+                        {name}
+                    </Typography.Title >
+                </Link>
+
 
                 <div className='flex flex-row justify-center w-full'>
-                    <Text className='text-base px-4' delete>1.200.000$</Text>
-                    <Text className='text-base text-[#d9a1a3]'>500.000$</Text>
+                    <Text className='text-base px-4 text-gray-500' delete>${price[0]}</Text>
+                    <Text className='text-base text-[#d9a1a3]'>${price[1]}</Text>
                 </div>
 
                 <div className='flex flex-row justify-center w-full'>
-                    <Text type="secondary" className='text-lg px-4'>Already Sold: 121</Text>
-                    <Text type="secondary" className='text-lg text-[#d9a1a3]'>Available: 999</Text>
+                    <Text type="secondary" className='text-lg px-4'>Already Sold: {amount[1]}</Text>
+                    <Text type="secondary" className='text-lg'>Available: {amount[0]}</Text>
                 </div>
 
                 <Progress percent={30} showInfo={false} strokeColor='#FF324D' className='w-full' />
