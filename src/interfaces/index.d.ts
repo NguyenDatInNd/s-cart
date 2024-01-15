@@ -28,3 +28,17 @@ export interface IOrder {
 export interface ICart {
   products: IOrder[];
 }
+
+export interface IFormValues {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  country: string;
+  address: string;
+  note: string;
+  total: number;
+  appliedCoupon: number;
+  shippingMethod: string;
+  paymentMethod: string;
+}

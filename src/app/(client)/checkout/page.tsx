@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useMemo } from 'react';
-import { Form, Input, Popconfirm, Space, Table, notification, Button, Select, Row, Col, Checkbox } from 'antd';
+import { Form, Input, Popconfirm, Space, Table, notification, Button, Select, Row, Col, Checkbox, Radio } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { GiShoppingBag } from "react-icons/gi";
 import Image from "next/image"
@@ -16,24 +16,29 @@ import { RiCoupon3Fill } from "react-icons/ri";
 import { FaShippingFast } from "react-icons/fa";
 import { MdOutlinePayment } from "react-icons/md";
 import { countries } from '@/components/country';
-import { IOrder } from '@/interfaces';
+import { IFormValues, IOrder } from '@/interfaces';
 import { useStoreCart } from '@/store/storeCart';
-
+import { useStoreFormInfor } from '@/store/storeFormInfor';
+import { useRouter } from 'next/navigation'
 
 const Checkout: React.FC = () => {
     const [form] = Form.useForm();
+    const router = useRouter()
 
-    const onFinish = (values: any) => {
-        console.log(values)
+    const onFinish = (values: IFormValues) => {
+        const formValues = { ...values, total: total, appliedCoupon: appliedCoupon }
+        setFormValues(formValues);
+        router.push('/checkout-confirm')
     };
 
     const { order } = useStoreCart();
+    const { setFormValues } = useStoreFormInfor();
     const [couponCode, setCouponCode] = useState<string>('');
     const [appliedCoupon, setAppliedCoupon] = useState<number>(0);
 
     const total = order.products.reduce((total, item) => total + item.price[0] * item.quantity, 0);
-    const tax = (total * 0.1).toFixed(2);
-    const totalAll = (Number(total) + Number(tax) - Number(appliedCoupon)).toFixed(2);
+    const tax = (total * 0.1)
+    const totalAll = (total + tax - appliedCoupon).toFixed(2);
 
     const handleApplyCoupon = () => {
         if (couponCode === 'ABC') {
@@ -48,7 +53,7 @@ const Checkout: React.FC = () => {
         {
             title: 'No.',
             key: 'order',
-            render: (text, record, index) => <a>{index + 1}</a>,
+            render: (text, record, index) => <p>{index + 1}</p>,
         },
         {
             title: 'Name',
@@ -57,13 +62,8 @@ const Checkout: React.FC = () => {
             render: ({ name, code, src }) => (
                 <>
                     <div className='flex gap-4 mb-3'>
-                        <Link className='ImageContainer' href={`/detail/${code.replace(/\s+/g, '-').toLowerCase()}`}>
-                            <Image src={src} width={100} height={80} alt={name} />
-                        </Link>
-
-                        <Link className='h-6 mt-7' href={`/detail/${code.replace(/\s+/g, '-').toLowerCase()}`}>
-                            <p className="subtext-footer capitalize text-base">{name}</p>
-                        </Link>
+                        <Image src={src} width={100} height={80} alt={name} />
+                        <p className="subtext-footer capitalize text-base">{name}</p>
                     </div>
 
                     <div className='flex flex-col gap-1'>
@@ -158,7 +158,6 @@ const Checkout: React.FC = () => {
                                     <Form.Item
                                         name="phone"
                                         label={<p className='flex items-center gap-1'><FaPhone /> Phone</p>}
-                                        rules={[{ required: true }, { type: 'number', warningOnly: true }, { type: 'string', min: 6 }]}
                                     >
                                         <Input placeholder='Phone' />
                                     </Form.Item>
@@ -169,11 +168,15 @@ const Checkout: React.FC = () => {
                                     label={<p className='flex items-center gap-1'><FaEarthAmericas /> Country</p>}
                                 >
                                     <Select
-                                        defaultValue=" "
-                                        options={countries}
-                                        placeholder='choose your country'
+                                        placeholder='Choose your country'
                                         style={{ width: 370 }}
-                                    />
+                                    >
+                                        {countries.map((country) => (
+                                            <Select.Option key={country.code} value={country.label}>
+                                                {country.label}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
 
                                 <Form.Item
@@ -197,7 +200,7 @@ const Checkout: React.FC = () => {
                                     <Col className='w-full h-12 flex pr-3 border-l-0 items-center justify-end border border-gray-300' span={7}>${total.toFixed(2)}</Col>
 
                                     <Col className='w-full h-12 flex pl-3 border-t-0 items-center justify-start border border-gray-300' span={17}>Tax</Col>
-                                    <Col className='w-full h-12 flex pr-3 border-l-0 border-t-0  items-center justify-end border border-gray-300' span={7}>${tax}</Col>
+                                    <Col className='w-full h-12 flex pr-3 border-l-0 border-t-0  items-center justify-end border border-gray-300' span={7}>${tax.toFixed(2)}</Col>
 
                                     {appliedCoupon > 0 && <>
                                         <Col className='w-full h-12 flex pl-3 border-t-0 items-center justify-start border border-gray-300' span={17}>Coupon/Discount</Col>
@@ -205,7 +208,7 @@ const Checkout: React.FC = () => {
                                     </>}
 
                                     <Col className='w-full h-12 bg-[#f5f3f3] flex pl-3 border-t-0 items-center justify-start border border-gray-300' span={17}>Total</Col>
-                                    <Col className='w-full h-12 bg-[#f5f3f3] flex pr-3 border-l-0 border-t-0  items-center justify-end border border-gray-300' span={7}>{totalAll}</Col>
+                                    <Col className='w-full h-12 bg-[#f5f3f3] flex pr-3 border-l-0 border-t-0  items-center justify-end border border-gray-300' span={7}>${totalAll}</Col>
                                 </Row>
 
                                 <div className='flex flex-col gap-1 mt-12'>
@@ -234,31 +237,37 @@ const Checkout: React.FC = () => {
                                 </div>
 
                                 <div className='flex flex-col gap-16 mt-16'>
-                                    <div>
-                                        <p className='text-3xl uppercase flex gap-3 items-center mb-3'><FaShippingFast />shipping method</p>
-                                        <Checkbox className='text-base text-[#9b9b9b]'> Shipping Standard</Checkbox>
-                                    </div>
+                                    <Form.Item name="shippingMethod" >
+                                        <div>
+                                            <p className='text-3xl uppercase flex gap-3 items-center mb-3'><FaShippingFast />shipping method</p>
+                                            <Radio.Group>
+                                                <Radio name='standard' value='standard' className='text-base text-[#9b9b9b]'> Shipping Standard</Radio>
+                                                <Radio name='express' value='express' className='text-base text-[#9b9b9b]'> Shipping Express</Radio>
+                                            </Radio.Group>
+                                        </div>
+                                    </Form.Item>
 
                                     <div className='flex flex-col'>
                                         <p className='text-3xl uppercase flex gap-3 items-center mb-3'><MdOutlinePayment />payment method</p>
-                                        <Checkbox >
-                                            <Image src='/banner/cash.png' width={200} height={80} alt='cash-method' />
-                                        </Checkbox>
+                                        <Form.Item name="paymentMethod" >
+                                            <Radio.Group>
+                                                <Radio name='cash' value='cash' className='text-base'>
+                                                    <Image src='/banner/cash.png' width={200} height={80} alt='cash-method' />
+                                                </Radio>
+                                                <Radio name='transfer' value='transfer' className='text-base'>
+                                                    <Image src='/banner/bank.png' width={200} height={80} alt='transfer-method' />
+                                                </Radio>
+                                            </Radio.Group>
+                                        </Form.Item>
 
-                                        <Checkbox className='text-base'>
-                                            <Image src='/banner/bank.png' width={200} height={80} alt='bank-method' />
-                                        </Checkbox>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
 
                         <Form.Item>
                             <div className='flex justify-end'>
-                                <Button htmlType="submit" className='h-16 w-44 bg-[#e9da5d] uppercase text-base flex justify-center items-center btn-add-to-cart rounded-none mt-5'>
-                                    checkout
+                                <Button htmlType="submit" className='h-16 w-44 bg-[#e9da5d] text-black uppercase text-base flex justify-center items-center btn-add-to-cart mt-5'>checkout
                                 </Button>
                             </div>
                         </Form.Item>

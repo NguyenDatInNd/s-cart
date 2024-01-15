@@ -24,7 +24,7 @@ const RelatedProducts: React.FC = () => {
                                 </Link>
 
                                 <Space className="justify-center" direction='vertical'>
-                                    <Link href={`/detail/${product.code.replace(/\s+/g, '-').toLowerCase()}`}>
+                                    <Link href={`/detail/${product.code.replace(/\s+/g, '-').toLowerCase()}`} className="text-black">
                                         <p className="subtext-footer capitalize ">{product.name}</p>
                                     </Link>
 

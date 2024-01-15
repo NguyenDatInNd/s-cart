@@ -20,7 +20,7 @@ const Cart: React.FC = () => {
         {
             title: 'No.',
             key: 'order',
-            render: (text, record, index) => <a>{index + 1}</a>,
+            render: (text, record, index) => <p>{index + 1}</p>,
         },
         {
             title: 'Name',
@@ -33,7 +33,7 @@ const Cart: React.FC = () => {
                             <Image src={src} width={100} height={80} alt={name} />
                         </Link>
 
-                        <Link className='h-6 mt-7' href={`/detail/${code.replace(/\s+/g, '-').toLowerCase()}`}>
+                        <Link className='h-6 mt-7 text-black' href={`/detail/${code.replace(/\s+/g, '-').toLowerCase()}`}>
                             <p className="subtext-footer capitalize text-base">{name}</p>
                         </Link>
                     </div>
@@ -141,7 +141,7 @@ const Cart: React.FC = () => {
                 </div>
                 <Table bordered columns={columns} dataSource={order.products} pagination={false} />
                 <div className='flex justify-end'>
-                    <Link href='/checkout' className='h-16 w-44 bg-[#e9da5d] uppercase text-base flex justify-center items-center btn-add-to-cart mt-5'>checkout
+                    <Link href='/checkout' className='h-16 w-44 bg-[#e9da5d] text-black uppercase text-base flex justify-center items-center btn-add-to-cart mt-5'>checkout
                     </Link>
                 </div>
             </div>

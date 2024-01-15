@@ -18,6 +18,10 @@ import { useStoreCart } from '@/store/storeCart';
 import useQuantityInOrder from '@/app/hooks/useQuantity';
 import useNotification from '@/app/hooks/useNotification';
 
+enum QuantityChangeAction {
+    Increase = "increase",
+    Decrease = "decrease",
+}
 
 const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
     const showNotification = useNotification();
@@ -26,6 +30,9 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
     const { quantityInOrder, handleQuantityInOrder } = useQuantityInOrder();
 
     const { order, setOrder } = useStoreCart();
+
+
+    console.log('selectedOptions', selectedOptions)
 
     const handleAddToCart = () => {
         const existingProductIndex = order.products.findIndex(
@@ -78,10 +85,10 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
                             <div className='w-[70px] h-[70px] text-2xl bg-[#ebebeb] text-[#151515] rounded-md flex justify-center items-center'>{quantityInOrder}</div>
 
                             <div className='flex flex-col justify-between gap-[6px]'>
-                                <button className='w-8 h-8 text-xl bg-[#ebebeb] text-[#151515] rounded-md flex justify-center items-center' onClick={() => handleQuantityInOrder('increase')}>
+                                <button className='w-8 h-8 text-xl bg-[#ebebeb] text-[#151515] rounded-md flex justify-center items-center' onClick={() => handleQuantityInOrder(QuantityChangeAction.Increase)}>
                                     <PlusOutlined className='subtext-footer' />
                                 </button>
-                                <button className='w-8 h-8 text-xl bg-[#ebebeb] text-[#151515] rounded-md flex justify-center items-center' onClick={() => handleQuantityInOrder('decrease')}>
+                                <button className='w-8 h-8 text-xl bg-[#ebebeb] text-[#151515] rounded-md flex justify-center items-center' onClick={() => handleQuantityInOrder(QuantityChangeAction.Increase)}>
                                     <MinusOutlined className='subtext-footer' />
                                 </button>
                             </div>
@@ -117,10 +124,10 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
                         <div className='flex gap-2'>
                             <p className='text-base'>Share:</p>
                             <Space className='text-[#151515] text-lg' direction='horizontal'>
-                                <Link href="/" className='subtext-footer'><GrFacebookOption /></Link>
-                                <Link href="/" className='subtext-footer'><FaTwitter /></Link>
-                                <Link href="/" className='subtext-footer'><BiLogoInstagramAlt /></Link>
-                                <Link href="/" className='subtext-footer'><FaGooglePlusG /></Link>
+                                <Link href="/" className='subtext-footer text-black'><GrFacebookOption /></Link>
+                                <Link href="/" className='subtext-footer text-black'><FaTwitter /></Link>
+                                <Link href="/" className='subtext-footer text-black'><BiLogoInstagramAlt /></Link>
+                                <Link href="/" className='subtext-footer text-black'><FaGooglePlusG /></Link>
                             </Space>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-import { ICart, IOrder, IProduct } from "@/interfaces";
+import { ICart, IOrder } from "@/interfaces";
 import { create } from "zustand";
 
 interface IStore {

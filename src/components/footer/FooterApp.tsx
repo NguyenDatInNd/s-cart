@@ -25,13 +25,13 @@ const FooterApp: React.FC = () => {
                         <Divider className="mt-5 bg-gray-500" />
 
                         <Space className='text-gray-100' direction='horizontal'>
-                            <Link href="/" className='subtext-footer'><GrFacebookOption /></Link>
+                            <Link href="/" className='subtext-footer text-gray-100'><GrFacebookOption /></Link>
 
-                            <Link href="/" className='subtext-footer'><FaTwitter /></Link>
+                            <Link href="/" className='subtext-footer text-gray-100'><FaTwitter /></Link>
 
-                            <Link href="/" className='subtext-footer'><BiLogoInstagramAlt /></Link>
+                            <Link href="/" className='subtext-footer text-gray-100'><BiLogoInstagramAlt /></Link>
 
-                            <Link href="/" className='subtext-footer'><FaYoutube /></Link>
+                            <Link href="/" className='subtext-footer text-gray-100'><FaYoutube /></Link>
                         </Space>
                     </div>
 
