@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { IProduct } from '@/interfaces';
 
 const ProductSale: React.FC<IProduct> = (props) => {
-    const { price, amount, name, src, code, attributes } = props;
+    const { price, amount, name, src, code, priceSale } = props;
     const [countdown, setCountdown] = useState({
         days: 0,
         hours: 0,
@@ -46,9 +46,7 @@ const ProductSale: React.FC<IProduct> = (props) => {
             <div className='flex items-center'>
                 <Link href={`/detail/${code.replace(/\s+/g, '-').toLowerCase()}`} key={code}>
                     <Image className='w-[180px] h-[145px]' src={src} width={200} height={150} alt={name} />
-
                 </Link>
-
             </div>
 
             <div className='flex items-center justify-between flex-col flex-1 py-7 px-5'>
@@ -60,13 +58,13 @@ const ProductSale: React.FC<IProduct> = (props) => {
 
 
                 <div className='flex flex-row justify-center w-full'>
-                    <Text className='text-base px-4 text-gray-500' delete>${price[0]}</Text>
-                    <Text className='text-base text-[#d9a1a3]'>${price[1]}</Text>
+                    <Text className='text-base px-4 text-gray-500' delete>${price}</Text>
+                    <Text className='text-base text-[#d9a1a3]'>${priceSale}</Text>
                 </div>
 
                 <div className='flex flex-row justify-center w-full'>
-                    <Text type="secondary" className='text-lg px-4'>Already Sold: {amount[1]}</Text>
-                    <Text type="secondary" className='text-lg'>Available: {amount[0]}</Text>
+                    <Text type="secondary" className='text-lg px-4'>Already Sold: {Number(amount) + 80}</Text>
+                    <Text type="secondary" className='text-lg'>Available: {amount}</Text>
                 </div>
 
                 <Progress percent={30} showInfo={false} strokeColor='#FF324D' className='w-full' />

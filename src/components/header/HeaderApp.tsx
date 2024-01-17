@@ -3,9 +3,8 @@ import Link from 'next/link';
 import { SearchOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import Image from 'next/image'
 import LanguageSwitch from './LanguageSwitch';
-import { Badge } from 'antd';
+import { Badge, Modal } from 'antd';
 import { useStoreCart } from '@/store/storeCart';
-import ModalApp from '../modal/ModalApp';
 import SearchInput from './Search';
 
 const HeaderApp: React.FC = () => {
@@ -54,10 +53,15 @@ const HeaderApp: React.FC = () => {
                 </div>
             </nav>
 
-            <ModalApp isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} title='' >
-                aklanvkja
+            <Modal
+                title='Search '
+                open={isModalOpen}
+                onOk={() => setIsModalOpen(false)}
+                onCancel={() => setIsModalOpen(false)}
+            >
                 {/* <SearchInput placeholder="input search text" style={{ width: 200 }} /> */}
-            </ModalApp>
+
+            </Modal>
         </header>
     );
 };

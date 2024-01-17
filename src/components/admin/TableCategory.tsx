@@ -1,14 +1,24 @@
-import React, { useState } from 'react';
-import { Button, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Modal, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
-import { IProduct } from '@/interfaces';
-import { products } from '@/data/products';
+import { ICategory } from '@/interfaces';
+import FormAddCategory from './FormAddCategory';
+import Image from 'next/image';
+import useStoreShop from '@/store/storeShop';
 
 const TableCategory = () => {
-    const columns: TableColumnsType<IProduct> = [
+    const [isModal, setIsModal] = useState(false);
+    const { category, fetchCategory } = useStoreShop();
+
+    useEffect(() => {
+        fetchCategory();
+    }, [fetchCategory]);
+
+    const columns: TableColumnsType<ICategory> = [
         {
             title: 'Hình ảnh',
             dataIndex: 'src',
+            render: (src: string) => <Image src={src} width={100} height={100} alt='category' />
         },
         {
             title: 'Tên danh mục',
@@ -17,7 +27,7 @@ const TableCategory = () => {
         {
             title: 'Trạng thái',
             dataIndex: 'status',
-            render: (status: number[]) => <p className={`${status ? 'bg-green-500' : 'bg-red-500'}`}>{status}</p>
+            render: (status: boolean) => <p className={`${status ? 'bg-green-500' : 'bg-red-500'}`}>{status}</p>
         },
         {
             title: 'Thao tác',
@@ -30,10 +40,10 @@ const TableCategory = () => {
         }
     ];
 
-    const data = products.map((product, index) => {
+    const data = category.map((item, index) => {
         return {
             key: index,
-            ...product
+            ...item
         }
     })
 
@@ -49,14 +59,29 @@ const TableCategory = () => {
         onChange: onSelectChange,
     };
     return (
-        <div className='m-5' >
-            <p className='text-2xl my-5'>Danh mục sản phẩm</p>
+        <div className='my-5 mx-10' >
+            <p className='text-3xl my-5'>Danh mục sản phẩm</p>
+
+            <div className='flex w-full justify-end'>
+                <Button onClick={() => setIsModal(true)} type="primary" className='mr-5'>Thêm mới</Button>
+                <Button type="primary" danger>Xóa</Button>
+            </div>
 
             <span style={{ marginLeft: 8 }}>
                 {selectedRowKeys.length > 0 ? `Selected ${selectedRowKeys.length} items` : ''}
             </span>
 
-            <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+            <Table bordered rowSelection={rowSelection} columns={columns} dataSource={data} />
+
+            <Modal
+                title='Thêm danh mục sản phẩm'
+                open={isModal}
+                centered
+                onCancel={() => setIsModal(false)}
+                footer
+            >
+                <FormAddCategory handleClose={() => setIsModal(false)} />
+            </Modal>
         </div>
     )
 }

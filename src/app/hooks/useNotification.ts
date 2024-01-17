@@ -1,6 +1,6 @@
 import { notification } from "antd";
 
-type NotificationType = "success" | "warning";
+type NotificationType = "success" | "warning" | "error" | "info";
 
 const useNotification = () => {
   const showNotification = (

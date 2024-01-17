@@ -13,7 +13,6 @@ import RecommendProducts from './RecommendProducts';
 const { Text } = Typography;
 import { IOrder, IProduct } from '@/interfaces';
 import useSelectedOptions from '@/app/hooks/useSelectedOptions';
-import useTotalPrice from '@/app/hooks/useTotalPrice';
 import { useStoreCart } from '@/store/storeCart';
 import useQuantityInOrder from '@/app/hooks/useQuantity';
 import useNotification from '@/app/hooks/useNotification';
@@ -26,13 +25,15 @@ enum QuantityChangeAction {
 const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
     const showNotification = useNotification();
     const { selectedOptions, handleOptionChange, getDefaultValue } = useSelectedOptions({});
-    const [totalSalePrice, totalBasePrice] = useTotalPrice(props.price[0], props.price[1], selectedOptions);
     const { quantityInOrder, handleQuantityInOrder } = useQuantityInOrder();
-
     const { order, setOrder } = useStoreCart();
 
+    const selectedOptionPrices = Object.values(selectedOptions).filter(Boolean) as number[];
+    console.log(selectedOptionPrices);
 
-    console.log('selectedOptions', selectedOptions)
+    const totalBasePrice = props.price + selectedOptionPrices.reduce((total, price) => total + price, 0);
+
+    const totalSalePrice = props.priceSale + selectedOptionPrices.reduce((total, price) => total + price, 0);
 
     const handleAddToCart = () => {
         const existingProductIndex = order.products.findIndex(
@@ -52,7 +53,8 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
                     selectedOptions: selectedOptions,
                 },
                 quantity: quantityInOrder,
-                price: [totalSalePrice, totalBasePrice],
+                price: totalBasePrice,
+                priceSale: totalSalePrice,
                 selectedOptions: selectedOptions,
             };
 
@@ -74,7 +76,7 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
                         <p className='uppercase'>Sku: {props.code} </p>
                         <div className='flex gap-4'>
                             <Text className='text-[#FE980F] font-bold text-xl'>${totalSalePrice}</Text>
-                            <Text className='text-[#a95d5d] text-lg' delete>${totalBasePrice}</Text>
+                            {props.priceSale > 0 && <Text className='text-[#a95d5d] text-lg' delete>${totalBasePrice}</Text>}
                         </div>
                     </div>
 
@@ -116,7 +118,7 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
                                 </div>
                             ))}
                             <p>Stock status: In stock</p>
-                            <p>Category: Pho Nam Dinh,</p>
+                            <p>Category: <span className='text-[#d9a1a3]'>{props.category}</span> </p>
                         </div>
 
                         <Divider className='bg-[#e1e1e1] mt-1' />
@@ -143,10 +145,10 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
                     </div>
                 </Divider>
 
-                <p className='text-base text-[#777777] font-sans'>{props.descrpiton}</p>
+                <p className='text-base text-[#777777] font-sans'>{props.description}</p>
 
                 <div className='flex items-center gap-4 text-[#777777] font-sans'>
-                    <p className='text-base'>{props.descrpiton}</p>
+                    <p className='text-base'>{props.description}</p>
                     <Image className='w-[150px] h-[113px] m-1' src="/shop/product-10.png" width={345} height={260} priority alt='detail-product' />
                 </div>
             </div>

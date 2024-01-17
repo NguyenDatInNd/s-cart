@@ -8,7 +8,7 @@ export const products: IProduct[] = [
     price: [80, 40],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [200, 100],
+    amount: 200,
     attributes: [
       {
         name: "Màu sắc",
@@ -45,7 +45,7 @@ export const products: IProduct[] = [
     price: [100, 50],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [213, 44],
+    amount: 233,
     attributes: [
       {
         name: "Màu sắc",
@@ -66,7 +66,7 @@ export const products: IProduct[] = [
 
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [23, 4],
+    amount: 35,
     attributes: [
       {
         name: "size",
@@ -90,7 +90,7 @@ export const products: IProduct[] = [
     price: [150, 75],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [123, 44],
+    amount: 65,
   },
   {
     name: "Muoi Tay Ninh",
@@ -99,7 +99,7 @@ export const products: IProduct[] = [
     price: [10, 8],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [123, 44],
+    amount: 123,
   },
   {
     name: "Nhan Long Hung Yen",
@@ -108,7 +108,7 @@ export const products: IProduct[] = [
     price: [100, 50],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [123, 44],
+    amount: 654,
     attributes: [
       {
         name: "Size",
@@ -132,7 +132,7 @@ export const products: IProduct[] = [
     price: [220, 120],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [123, 44],
+    amount: 98,
   },
   {
     name: "bánh tráng trộn",
@@ -141,7 +141,7 @@ export const products: IProduct[] = [
     price: [80, 40],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [200, 100],
+    amount: 32,
     attributes: [
       {
         name: "khối lượng",
@@ -165,7 +165,7 @@ export const products: IProduct[] = [
     price: [75, 30],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [200, 100],
+    amount: 64,
     attributes: [
       {
         name: "khối lượng",
@@ -202,7 +202,7 @@ export const products: IProduct[] = [
     price: [20, 7],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [213, 44],
+    amount: 23,
     attributes: [
       {
         name: "size",
@@ -226,7 +226,7 @@ export const products: IProduct[] = [
     price: [80, 40],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [200, 100],
+    amount: 86,
     attributes: [
       {
         name: "khối lượng",
@@ -263,7 +263,7 @@ export const products: IProduct[] = [
     price: [110, 90],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [23, 4],
+    amount: 98,
   },
   {
     name: "Cháo lòng tiết canh",
@@ -272,7 +272,7 @@ export const products: IProduct[] = [
     price: [20, 10],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [213, 44],
+    amount: 66,
   },
   {
     name: "bánh mì chả cá",
@@ -281,7 +281,7 @@ export const products: IProduct[] = [
     price: [35, 15],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [30, 15],
+    amount: 933,
     attributes: [
       {
         name: "Loại cá",

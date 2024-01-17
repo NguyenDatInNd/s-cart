@@ -8,7 +8,7 @@ export const specialProducts: IProduct[] = [
     price: [80, 40],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [200, 100],
+    amount: 65,
     attributes: [
       {
         name: "khối lượng",
@@ -32,7 +32,7 @@ export const specialProducts: IProduct[] = [
     price: [75, 30],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [200, 100],
+    amount: 454,
     attributes: [
       {
         name: "khối lượng",
@@ -69,7 +69,7 @@ export const specialProducts: IProduct[] = [
     price: [20, 7],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [213, 44],
+    amount: 767,
     attributes: [
       {
         name: "size",
@@ -93,7 +93,7 @@ export const specialProducts: IProduct[] = [
     price: [100, 50],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [213, 44],
+    amount: 88,
     attributes: [
       {
         name: "Màu sắc",
@@ -113,7 +113,7 @@ export const specialProducts: IProduct[] = [
     price: [80, 40],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [200, 100],
+    amount: 45,
     attributes: [
       {
         name: "Màu sắc",

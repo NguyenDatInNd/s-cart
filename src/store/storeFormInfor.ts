@@ -23,6 +23,5 @@ export const useStoreFormInfor = create<IStoreForm>((set) => ({
 
   setFormValues: (formValues) => {
     set({ form: { ...formValues } });
-    console.log("===>>>>", formValues);
   },
 }));

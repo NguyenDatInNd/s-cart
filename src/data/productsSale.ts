@@ -8,7 +8,7 @@ export const productsSale: IProduct[] = [
     price: [80, 40],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [200, 100],
+    amount: 10,
     attributes: [
       {
         name: "Màu sắc",
@@ -45,7 +45,7 @@ export const productsSale: IProduct[] = [
     price: [100, 50],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [213, 44],
+    amount: 44,
     attributes: [
       {
         name: "Màu sắc",

@@ -9,6 +9,7 @@ const useTotalPrice = (
 
   const totalBasePrice =
     basePrice + selectedOptionPrices.reduce((total, price) => total + price, 0);
+
   const totalSalePrice =
     salePrice + selectedOptionPrices.reduce((total, price) => total + price, 0);
 

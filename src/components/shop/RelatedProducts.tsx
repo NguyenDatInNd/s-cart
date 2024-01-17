@@ -1,13 +1,22 @@
 'use client'
 
-import { specialProducts } from "@/data/specialProducts";
-import { IProduct } from "@/interfaces";
+import useStoreShop from "@/store/storeShop";
 import { Divider, Space, Typography } from "antd"
 import Image from "next/image"
 import Link from "next/link";
+import { useEffect } from "react";
 const { Text } = Typography;
 
 const RelatedProducts: React.FC = () => {
+    const { fetchCategory, fetchProducts, products } = useStoreShop();
+
+    useEffect(() => {
+        fetchCategory();
+        fetchProducts();
+    }, [fetchCategory, fetchProducts]);
+
+    const specialProducts = products.filter(product => product.outstanding);
+
     return (
         <div>
             <div className="flex flex-col gap-12">
@@ -29,8 +38,8 @@ const RelatedProducts: React.FC = () => {
                                     </Link>
 
                                     <div className='flex flex-row gap-4 w-full text-sm mt-1'>
-                                        <Text className='text-gray-500' delete>${product.price[0]}</Text>
-                                        <Text className='text-[#d9a1a3]'>${product.price[1]}</Text>
+                                        {product.priceSale > 0 && <Text className='text-gray-500' delete>${product.priceSale}</Text>}
+                                        <Text className='text-[#d9a1a3]'>${product.price}</Text>
                                     </div>
                                 </Space>
                             </div>

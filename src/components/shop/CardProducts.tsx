@@ -20,7 +20,7 @@ const CardProducts: React.FC<ICardProductsProps> = ({ small, ...props }) => {
     const showNotification = useNotification();
     const { order, setOrder } = useStoreCart();
     const { selectedOptions } = useSelectedOptions({});
-    const [totalSalePrice, totalBasePrice] = useTotalPrice(props.price[0], props.price[1], selectedOptions);
+    const [totalSalePrice, totalBasePrice] = useTotalPrice(props.priceSale, props.price, selectedOptions);
     const { quantityInOrder } = useQuantityInOrder();
 
     const handleAddToCart = () => {
@@ -41,7 +41,8 @@ const CardProducts: React.FC<ICardProductsProps> = ({ small, ...props }) => {
                     selectedOptions: selectedOptions,
                 },
                 quantity: quantityInOrder,
-                price: [totalSalePrice, totalBasePrice],
+                price: totalBasePrice,
+                priceSale: totalSalePrice,
                 selectedOptions: selectedOptions,
             };
 
@@ -68,8 +69,8 @@ const CardProducts: React.FC<ICardProductsProps> = ({ small, ...props }) => {
             </button>
 
             <div className='flex flex-row justify-center w-full mt-1'>
-                <Text className='text-base pr-4  text-gray-500' delete>${props.price[0]}</Text>
-                <Text className='text-base text-[#d9a1a3]'>${props.price[1]}</Text>
+                {props.priceSale > 0 && <Text className='text-base pr-4  text-gray-500' delete>${props.priceSale}</Text>}
+                <Text className='text-base text-[#d9a1a3]'>${props.price}</Text>
             </div>
 
             <div className='flex flex-row justify-center w-full mt-7 container-action'>

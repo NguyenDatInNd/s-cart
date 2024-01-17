@@ -126,7 +126,6 @@ const Checkout: React.FC = () => {
                         form={form}
                         onFinish={onFinish}
                         layout='vertical'
-                        autoComplete="off"
                         requiredMark={false}
                     >
                         <div className='flex gap-10'>

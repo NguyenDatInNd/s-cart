@@ -8,7 +8,7 @@ export const recommendProducts: IProduct[] = [
     price: [80, 40],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [200, 100],
+    amount: 258,
     attributes: [
       {
         name: "khối lượng",
@@ -45,7 +45,7 @@ export const recommendProducts: IProduct[] = [
     price: [110, 90],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [23, 4],
+    amount: 2423,
   },
   {
     name: "Cháo lòng tiết canh",
@@ -54,7 +54,7 @@ export const recommendProducts: IProduct[] = [
     price: [20, 10],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [213, 44],
+    amount: 24,
   },
   {
     name: "bánh mì chả cá",
@@ -63,7 +63,7 @@ export const recommendProducts: IProduct[] = [
     price: [35, 15],
     descrpiton:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    amount: [30, 15],
+    amount: 987,
     attributes: [
       {
         name: "Loại cá",

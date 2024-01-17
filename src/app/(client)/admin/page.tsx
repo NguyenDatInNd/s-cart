@@ -2,9 +2,6 @@
 
 import TableCategory from "@/components/admin/TableCategory";
 import TableProducts from "@/components/admin/TableProducts";
-import { products } from "@/data/products";
-import { storage } from "@/firebase/firebase";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { Layout, Tabs, theme } from "antd";
 const { Header, Footer } = Layout;
 
@@ -13,50 +10,8 @@ const AdminPage = () => {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
-    const imgRef = ref(storage, 'images/1.jpg');
-
-    function handleUpload(event: any) {
-        const file = event.target.files[0];
-        const storageRef = ref(storage, `/files/${file.name + Date.now()}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-        uploadTask.on(
-            "state_changed",
-            (snapshot) => { },
-            (err) => console.log(err),
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-
-                });
-            }
-        );
-        event.target.value = null;
-
-    }
-
-    // async function uploadImages() {
-    //     try {
-    //         for (const product of products) {
-    //             if (product.src) {
-    //                 const imageRef = storage.ref(`images/${product.src}`);
-    //                 const uploadTask = await imageRef.putString(product.src, "base64");
-    //                 const downloadURL = await uploadTask.ref.getDownloadURL();
-    //                 product.imageURL = downloadURL;
-
-    //                 // Update the product in Firestore with the image URL
-    //                 await db.collection("products").doc(product.id).update({ imageURL: downloadURL });
-    //             }
-    //         }
-    //         console.log("Images uploaded to Cloud Storage!");
-    //     } catch (error) {
-    //         console.error("Error uploading images:", error);
-    //     }
-    // }
-
-    // uploadImages();
-
     return (
         <Layout>
-            <input type="file" onChange={handleUpload} />
             <Header className="text-center text-white text-2xl flex items-center justify-center">S-Cart Admin</Header>
             <Layout>
                 <Tabs

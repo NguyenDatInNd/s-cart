@@ -2,10 +2,15 @@ export interface IProduct {
   name: string;
   code: string;
   src: string;
-  price: number[];
-  amount: number[];
-  descrpiton: string;
+  category?: string;
+  price: number;
+  priceSale: number;
+  amount: number;
+  description: string;
   attributes?: IAttribute[];
+  status?: boolean;
+  outstanding?: boolean;
+  timestamp?: number;
 }
 
 interface IAttribute {
@@ -21,7 +26,8 @@ interface IOption {
 export interface IOrder {
   product: IProduct & { selectedOptions: Record<string, number | undefined> };
   quantity: number;
-  price: number[];
+  price: number;
+  priceSale: number;
   selectedOptions: Record<string, number | undefined>;
 }
 
@@ -41,4 +47,11 @@ export interface IFormValues {
   appliedCoupon: number;
   shippingMethod: string;
   paymentMethod: string;
+}
+
+export interface ICategory {
+  name: string;
+  src: string;
+  description: string;
+  status: boolean;
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
-import { Space, Table, Row, Col, Button, } from 'antd';
+import { Space, Table, Row, Col, Button, Modal, } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { GiShoppingBag } from "react-icons/gi";
 import Image from "next/image"
@@ -12,7 +12,6 @@ import { useStoreFormInfor } from '@/store/storeFormInfor';
 import { FaShippingFast } from 'react-icons/fa';
 import { MdOutlinePayment } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
-import ModalApp from '@/components/modal/ModalApp';
 import useOrderCode from '@/app/hooks/useOrderCode';
 
 enum PaymentMethod {
@@ -24,8 +23,17 @@ const CheckoutConfirm: React.FC = () => {
     const { order } = useStoreCart();
     const { form } = useStoreFormInfor();
     const router = useRouter()
+    const { setOrder } = useStoreCart();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const orderCode = useOrderCode(12);
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setTimeout(() => {
+            router.push('/');
+            setOrder({ products: [] })
+        }, 1000);
+    }
 
     const columns: ColumnsType<IOrder> = [
         {
@@ -163,11 +171,18 @@ const CheckoutConfirm: React.FC = () => {
                 </div >
             </div >
 
-            <ModalApp isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} title='ORDER SUCCESS'>
+            <Modal
+                onOk={handleCloseModal}
+                onCancel={handleCloseModal}
+                open={isModalOpen}
+                centered
+                cancelButtonProps={{ style: { display: 'none' } }}
+                title='ORDER SUCCESS'
+            >
                 <p className='text-xl my-5'>THANK YOU FOR YOUR PURCHASE!</p>
                 <span className='text-xl mr-3'>YOUR ORDER</span>
                 <span className='text-xl italic font-light mb-4'>{orderCode}</span>
-            </ModalApp>
+            </Modal>
         </ >
     )
 }
