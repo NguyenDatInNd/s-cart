@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React from 'react';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Divider, Typography, Radio, Space } from 'antd';
 import Image from 'next/image'
@@ -45,20 +45,18 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
             const newOrder: IOrder = {
                 product: {
                     ...props,
+                    price: totalBasePrice,
+                    priceSale: totalSalePrice,
                     selectedOptions: selectedOptions,
                 },
                 quantity: quantityInOrder,
-                price: totalBasePrice,
-                priceSale: totalSalePrice,
                 selectedOptions: selectedOptions,
             };
-
+            console.log("newOrder =>>", newOrder)
             setOrder({ products: [...order.products, newOrder] });
         }
         showNotification('success', 'Add to cart successfully', `Added ${quantityInOrder} ${props.name} to cart`);
     };
-
-    console.log("order", order)
 
     return (
         <div className="pt-24 pb-12 w-[895px] flex flex-col gap-16">
@@ -150,7 +148,7 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
                 </div>
             </div>
 
-            <RecommendProducts />
+            <RecommendProducts category={props.category} code={props.code} />
         </div>
     )
 }

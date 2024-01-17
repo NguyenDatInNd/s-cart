@@ -17,7 +17,7 @@ export default function DetailPage({ params }: { params: { id: string } }) {
         fetchProducts();
     }, [fetchCategory, fetchProducts]);
 
-    const data = products.find(product => product.code === params.id) as IProduct;
+    const data = products.find(product => product.code === params.id && product.status) as IProduct;
 
     return (
         <>

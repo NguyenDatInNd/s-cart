@@ -1,11 +1,10 @@
 'use client'
 
 import React, { useState, useMemo } from 'react';
-import { Form, Input, Popconfirm, Space, Table, notification, Button, Select, Row, Col, Checkbox, Radio } from 'antd';
+import { Form, Input, Space, Table, Button, Select, Row, Col, Radio } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { GiShoppingBag } from "react-icons/gi";
 import Image from "next/image"
-import Link from 'next/link';
 import BreadcrumbApp from '@/components/breadcrumb/BreadcrumbApp';
 import { GoPersonFill } from "react-icons/go";
 import { FaPhone, FaEarthAmericas } from "react-icons/fa6";
@@ -36,7 +35,7 @@ const Checkout: React.FC = () => {
     const [couponCode, setCouponCode] = useState<string>('');
     const [appliedCoupon, setAppliedCoupon] = useState<number>(0);
 
-    const total = order.products.reduce((total, item) => total + item.price[0] * item.quantity, 0);
+    const total = order.products.reduce((total, item) => total + (item.product.priceSale > 0 ? item.product.priceSale : item.product.price) * item.quantity, 0);
     const tax = (total * 0.1)
     const totalAll = (total + tax - appliedCoupon).toFixed(2);
 
@@ -80,14 +79,22 @@ const Checkout: React.FC = () => {
         },
         {
             title: 'Price',
-            dataIndex: 'price',
-            key: 'price',
-            render: (_, { price }) => (
-                <div className='flex items-center gap-4'>
-                    <p className='text-[#15151580] font-extralight text-sm line-through'>{price[1]}</p>
-                    <p className='text-[#d9a1a3] text-sm'>{price[0]}</p>
-                </div>
-            )
+            children: [
+                {
+                    title: 'Price',
+                    dataIndex: 'product',
+                    key: 'price',
+                    render: ({ priceSale, price }) => <p className={`text-sm ${priceSale > 0 ? "text-[#15151580] font-extralight line-through" : 'text-[#d9a1a3]'} `}>{price}</p>,
+                    width: 100,
+                },
+                {
+                    title: 'Price Sale',
+                    dataIndex: 'product',
+                    key: 'priceSale',
+                    render: ({ priceSale }) => <p className='text-[#d9a1a3] text-sm'>{priceSale > 0 && priceSale}</p>,
+                    width: 100,
+                },
+            ],
         },
         {
             title: 'Quantity',
@@ -99,8 +106,8 @@ const Checkout: React.FC = () => {
             title: 'Subtotal',
             key: 'total',
             render: (_, record) => {
-                const { quantity, price } = record;
-                const subtotal = price[1] * quantity;
+                const { quantity, product } = record;
+                const subtotal = (product.priceSale > 0 ? product.priceSale : product.price) * quantity;
                 return (
                     <Space className='w-full flex justify-between' size='large' direction='horizontal'>
                         <p className='ml-3'>${subtotal}</p>
@@ -133,6 +140,7 @@ const Checkout: React.FC = () => {
                                 <Space direction='horizontal'>
                                     <Form.Item
                                         name="first_name"
+                                        rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
                                         label={<p className='flex items-center gap-1'><GoPersonFill /> First name</p>}
                                     >
                                         <Input placeholder='First name' />
@@ -140,6 +148,7 @@ const Checkout: React.FC = () => {
 
                                     <Form.Item
                                         name="last_name"
+                                        rules={[{ required: true, message: 'Vui lòng nhập họ' }]}
                                         label={<p className='flex items-center gap-1'><GoPersonFill /> Last name</p>}
                                     >
                                         <Input placeholder='Last name' />
@@ -149,6 +158,7 @@ const Checkout: React.FC = () => {
                                 <Space direction='horizontal'>
                                     <Form.Item
                                         name="email"
+                                        rules={[{ required: true, message: 'Vui lòng nhập email!' }]}
                                         label={<p className='flex items-center gap-1'><MailFilled /> Email</p>}
                                     >
                                         <Input placeholder='Email' />
@@ -156,6 +166,7 @@ const Checkout: React.FC = () => {
 
                                     <Form.Item
                                         name="phone"
+                                        rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
                                         label={<p className='flex items-center gap-1'><FaPhone /> Phone</p>}
                                     >
                                         <Input placeholder='Phone' />
@@ -164,6 +175,7 @@ const Checkout: React.FC = () => {
 
                                 <Form.Item
                                     name="country"
+                                    rules={[{ required: true, message: 'Vui lòng chọn quốc gia!' }]}
                                     label={<p className='flex items-center gap-1'><FaEarthAmericas /> Country</p>}
                                 >
                                     <Select
@@ -180,6 +192,7 @@ const Checkout: React.FC = () => {
 
                                 <Form.Item
                                     name="address"
+                                    rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}
                                     label={<p className='flex items-center gap-1'><BsBodyText />Address</p>}
                                 >
                                     <Input style={{ width: 370 }} placeholder='Address...' />
@@ -236,7 +249,9 @@ const Checkout: React.FC = () => {
                                 </div>
 
                                 <div className='flex flex-col gap-16 mt-16'>
-                                    <Form.Item name="shippingMethod" >
+                                    <Form.Item name="shippingMethod"
+                                        rules={[{ required: true, message: 'Vui lòng chọn phương thức vận chuyển!' }]}
+                                    >
                                         <div>
                                             <p className='text-3xl uppercase flex gap-3 items-center mb-3'><FaShippingFast />shipping method</p>
                                             <Radio.Group>
@@ -248,7 +263,9 @@ const Checkout: React.FC = () => {
 
                                     <div className='flex flex-col'>
                                         <p className='text-3xl uppercase flex gap-3 items-center mb-3'><MdOutlinePayment />payment method</p>
-                                        <Form.Item name="paymentMethod" >
+                                        <Form.Item name="paymentMethod"
+                                            rules={[{ required: true, message: 'Vui lòng chọn phương thức thanh toán!' }]}
+                                        >
                                             <Radio.Group>
                                                 <Radio name='cash' value='cash' className='text-base'>
                                                     <Image src='/banner/cash.png' width={200} height={80} alt='cash-method' />

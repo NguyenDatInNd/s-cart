@@ -1,52 +1,56 @@
-import React, { useState } from 'react';
-import jsonp from 'fetch-jsonp';
-import qs from 'qs';
+import React, { useEffect, useState } from 'react';
 import { Select } from 'antd';
 import type { SelectProps } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-
-let timeout: ReturnType<typeof setTimeout> | null;
-let currentValue: string;
-
-const fetch = (value: string, callback: Function) => {
-    if (timeout) {
-        clearTimeout(timeout);
-        timeout = null;
-    }
-    currentValue = value;
-
-    const fake = () => {
-        const str = qs.stringify({
-            code: 'utf-8',
-            q: value,
-        });
-        jsonp(`https://suggest.taobao.com/sug?${str}`)
-            .then((response: any) => response.json())
-            .then((d: any) => {
-                if (currentValue === value) {
-                    const { result } = d;
-                    const data = result.map((item: any) => ({
-                        value: item[0],
-                        text: item[0],
-                    }));
-                    callback(data);
-                }
-            });
-    };
-    if (value) {
-        timeout = setTimeout(fake, 300);
-    } else {
-        callback([]);
-    }
-};
+import useStoreShop from '@/store/storeShop';
+import Image from 'next/image'
+import Link from 'next/link';
 
 const SearchInput: React.FC<{ placeholder: string; style: React.CSSProperties }> = (props) => {
     const [data, setData] = useState<SelectProps['options']>([]);
     const [value, setValue] = useState<string>();
+    const { products, fetchProducts } = useStoreShop();
+
+    useEffect(() => {
+        fetchProducts();
+    }, [fetchProducts]);
 
     const handleSearch = (newValue: string) => {
         fetch(newValue, setData);
     };
+
+
+    let timeout: ReturnType<typeof setTimeout> | null;
+    let currentValue: string;
+
+    const fetch = (value: string, callback: Function) => {
+        if (timeout) {
+            clearTimeout(timeout);
+            timeout = null;
+        }
+        currentValue = value;
+
+        const query = () => {
+            if (currentValue === value) {
+                const result = products
+                    .filter((product) => product.name.toLowerCase().includes(value.toLowerCase()))
+                    .map((product) => ({
+                        value: product.code,
+                        label:
+                            <Link href={`/detail/${product.code.replace(/\s+/g, '-').toLowerCase()}`}>
+                                <div className='flex gap-2 items-center text-base'>
+                                    <Image src={product.src} alt={product.name} width={30} height={20} />
+                                    {product.name}
+                                </div>
+                            </Link>
+                    }));
+                callback(result);
+            }
+        };
+
+        timeout = setTimeout(query, 300);
+    };
+
 
     const handleChange = (newValue: string) => {
         setValue(newValue);
@@ -66,12 +70,10 @@ const SearchInput: React.FC<{ placeholder: string; style: React.CSSProperties }>
             notFoundContent={null}
             options={(data || []).map((d) => ({
                 value: d.value,
-                label: d.text,
+                label: d.label,
             }))}
         />
     );
 };
-
-// const App: React.FC = () => <SearchInput placeholder="input search text" style={{ width: 200 }} />;
 
 export default SearchInput;

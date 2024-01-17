@@ -13,6 +13,8 @@ import { FaShippingFast } from 'react-icons/fa';
 import { MdOutlinePayment } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
 import useOrderCode from '@/app/hooks/useOrderCode';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '@/firebase/firebase';
 
 enum PaymentMethod {
     Cash = 'cash',
@@ -26,6 +28,27 @@ const CheckoutConfirm: React.FC = () => {
     const { setOrder } = useStoreCart();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const orderCode = useOrderCode(12);
+    const docRef = collection(db, 'order');
+
+    const addOrder = async (form: any) => {
+        try {
+            await addDoc(docRef, form);
+            setIsModalOpen(true)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleAddOrder = () => {
+        const newForm = {
+            ...form, timestamp: Date.now(),
+            orderCode: orderCode,
+            note: form.note ?? '',
+            order: order.products,
+            full_name: `${form.first_name} ${form.last_name}`
+        }
+        addOrder(newForm)
+    }
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
@@ -70,12 +93,11 @@ const CheckoutConfirm: React.FC = () => {
         },
         {
             title: 'Price',
-            dataIndex: 'price',
+            dataIndex: 'product',
             key: 'price',
-            render: (_, { price }) => (
+            render: ({ price, priceSale }) => (
                 <div className='flex items-center gap-4'>
-                    <p className='text-[#15151580] font-extralight text-sm line-through'>{price[1]}</p>
-                    <p className='text-[#d9a1a3] text-sm'>{price[0]}</p>
+                    <p className='text-[#d9a1a3] text-sm'>{priceSale > 0 ? priceSale : price}</p>
                 </div>
             )
         },
@@ -89,8 +111,8 @@ const CheckoutConfirm: React.FC = () => {
             title: 'Subtotal',
             key: 'total',
             render: (_, record) => {
-                const { quantity, price } = record;
-                const subtotal = price[1] * quantity;
+                const { quantity, product } = record;
+                const subtotal = (product.priceSale > 0 ? product.priceSale : product.price) * quantity;
                 return (
                     <Space className='w-full flex justify-between' size='large' direction='horizontal'>
                         <p className='ml-3'>${subtotal}</p>
@@ -163,7 +185,7 @@ const CheckoutConfirm: React.FC = () => {
                                 <Button onClick={() => router.push('/cart')} className='h-16 w-44 bg-[#efefef] text-black uppercase text-base flex justify-center items-center mt-5'>back to cart
                                 </Button>
 
-                                <Button onClick={() => setIsModalOpen(true)} className='h-16 w-44 bg-[#e9da5d] text-black uppercase text-base flex justify-center items-center btn-add-to-cart mt-5'>checkout
+                                <Button onClick={handleAddOrder} className='h-16 w-44 bg-[#e9da5d] text-black uppercase text-base flex justify-center items-center btn-add-to-cart mt-5'>checkout
                                 </Button>
                             </div>
                         </div>

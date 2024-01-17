@@ -56,15 +56,15 @@ const Cart: React.FC = () => {
                 {
                     title: 'Price',
                     dataIndex: 'product',
-                    key: 'priceSale',
-                    render: ({ priceSale, price }) => <p className={` ${priceSale > 0 ? "text-[#15151580] font-extralight text-sm line-through" : 'text-[#d9a1a3] text-sm'} `}>{price}</p>,
+                    key: 'price',
+                    render: ({ priceSale, price }) => <p className={`text-sm ${priceSale > 0 ? "text-[#15151580] font-extralight line-through" : 'text-[#d9a1a3]'} `}>{price}</p>,
                     width: 100,
                 },
                 {
                     title: 'Price Sale',
-                    dataIndex: 'price',
-                    render: (price: number) => <p className='text-[#d9a1a3] text-sm'>{price > 0 && price}</p>,
+                    dataIndex: 'product',
                     key: 'priceSale',
+                    render: ({ priceSale }) => <p className='text-[#d9a1a3] text-sm'>{priceSale > 0 && priceSale}</p>,
                     width: 100,
                 },
             ],
@@ -97,8 +97,8 @@ const Cart: React.FC = () => {
             title: 'Subtotal',
             key: 'total',
             render: (_, record) => {
-                const { quantity, price, priceSale } = record;
-                const subtotal = priceSale > 0 ? quantity * priceSale : quantity * price;
+                const { quantity, product } = record;
+                const subtotal = product.priceSale > 0 ? quantity * product.priceSale : quantity * product.price;
                 return (
                     <Space className='w-full flex justify-between' size='large' direction='horizontal'>
                         <p className='ml-3'>${subtotal}</p>
@@ -138,7 +138,7 @@ const Cart: React.FC = () => {
         showNotification('success', 'Item Deleted', `${record.product.name} has been deleted from the cart.`);
     };
 
-    console.log(order)
+    console.log("order =>>", order)
     return (
         <div>
             <BreadcrumbApp />

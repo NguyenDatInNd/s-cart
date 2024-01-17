@@ -11,7 +11,7 @@ const FlaskSale: React.FC = () => {
         fetchProducts();
     }, [fetchCategory, fetchProducts]);
 
-    const data = products.filter(product => product.priceSale > 0);
+    const data = products.filter(product => product.priceSale > 0 && product.status);
 
     return (
         <Space size='large' direction='vertical' className="w-full my-20">

@@ -54,13 +54,13 @@ const HeaderApp: React.FC = () => {
             </nav>
 
             <Modal
-                title='Search '
+                title='Search'
                 open={isModalOpen}
                 onOk={() => setIsModalOpen(false)}
                 onCancel={() => setIsModalOpen(false)}
+                footer={null}
             >
-                {/* <SearchInput placeholder="input search text" style={{ width: 200 }} /> */}
-
+                <SearchInput placeholder="input search text" style={{ width: '100%' }} />
             </Modal>
         </header>
     );

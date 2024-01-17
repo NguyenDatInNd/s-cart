@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Modal, Switch, Table } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Button, Modal, Popconfirm, Switch, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { IProduct } from '@/interfaces';
 import FormAddProduct from './FormAddProduct';
 import Image from 'next/image';
 import useStoreShop from '@/store/storeShop';
+import { collection, deleteDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { db } from '@/firebase/firebase';
+import useNotification from '@/app/hooks/useNotification';
 
 const TableProducts = () => {
     const [isModal, setIsModal] = useState(false);
     const { fetchCategory, fetchProducts, products } = useStoreShop();
+    const showNotification = useNotification();
 
     useEffect(() => {
         fetchCategory();
@@ -16,6 +20,11 @@ const TableProducts = () => {
     }, [fetchCategory, fetchProducts]);
 
     const columns: TableColumnsType<IProduct> = [
+        {
+            title: 'Số thứ tự',
+            dataIndex: 'key',
+            render: (key: number) => <p>{key}</p>
+        },
         {
             title: 'Hình ảnh',
             dataIndex: 'src',
@@ -50,30 +59,30 @@ const TableProducts = () => {
         {
             title: 'Trạng thái',
             dataIndex: 'status',
-            render: (status: boolean) => <Switch className='bg-red' checkedChildren="ON" unCheckedChildren="OFF" value={status} />
+            render: (status: boolean) => <Switch checkedChildren="ON" unCheckedChildren="OFF" value={status} />
         },
         {
             title: 'Thao tác',
             render: () => (
-                <>
+                <div className='flex gap-3'>
                     <Button type="primary">Sửa</Button>
-                    <Button type="primary" danger>Xóa</Button>
-                </>
+                    <Button type="primary" danger>Xem chi tiết</Button>
+                </div>
             ),
         }
     ];
 
-    const data = products.map((product, index) => {
-        return {
-            key: index,
-            ...product
-        }
-    })
+    const data = useMemo(() => {
+        return products.map((product, index) => ({
+            key: index + 1,
+            ...product,
+        }));
+    }, [products]);
 
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [documentIDs, setDocumentIDs] = useState<string[]>([]);
 
     const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-        console.log('selectedRowKeys changed: ', newSelectedRowKeys);
         setSelectedRowKeys(newSelectedRowKeys);
     };
 
@@ -82,13 +91,62 @@ const TableProducts = () => {
         onChange: onSelectChange,
     };
 
+    const codeSelected = useMemo(() => {
+        return data
+            .filter((item) => selectedRowKeys.includes(item.key))
+            .map((item) => item.code);
+    }, [data, selectedRowKeys]);
+
+    useEffect(() => {
+        const getDocumentIDsByCode = async () => {
+            if (codeSelected.length > 0) {
+                const collectionRef = collection(db, 'products');
+                const q = query(collectionRef, where('code', 'in', codeSelected));
+
+                try {
+                    const querySnapshot = await getDocs(q);
+                    const documentIDs = querySnapshot.docs.map((doc) => doc.id);
+                    setDocumentIDs(documentIDs);
+                } catch (error) {
+                    console.error('Error getting document IDs:', error);
+                }
+            }
+        };
+
+        getDocumentIDsByCode();
+    }, [codeSelected]);
+
+    const handleDeleteProduct = async () => {
+        try {
+            const batch: Promise<void>[] = [];
+            documentIDs.forEach((documentID) => {
+                const documentRef = doc(db, 'products', documentID);
+                batch.push(deleteDoc(documentRef));
+            });
+
+            await Promise.all(batch);
+            showNotification('success', 'Product deleted', '');
+            setSelectedRowKeys([]);
+            fetchProducts();
+        } catch (error) {
+            console.error('Error deleting documents:', error);
+        }
+    }
+
     return (
         <div className='my-5 mx-10' >
             <p className='text-3xl my-5'>Danh sách sản phẩm</p>
 
             <div className='flex w-full justify-end'>
                 <Button onClick={() => setIsModal(true)} type="primary" className='mr-5'>Thêm mới</Button>
-                <Button type="primary" danger>Xóa</Button>
+                <Popconfirm
+                    title="Are you sure to delete this product?"
+                    onConfirm={() => handleDeleteProduct()}
+                    okText='Yes'
+                    cancelText="No"
+                >
+                    <Button type="primary" danger>Xóa</Button>
+                </Popconfirm>
             </div>
 
             <span style={{ marginLeft: 8 }}>

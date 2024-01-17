@@ -2,7 +2,7 @@ export interface IProduct {
   name: string;
   code: string;
   src: string;
-  category?: string;
+  category: string;
   price: number;
   priceSale: number;
   amount: number;
@@ -26,8 +26,6 @@ interface IOption {
 export interface IOrder {
   product: IProduct & { selectedOptions: Record<string, number | undefined> };
   quantity: number;
-  price: number;
-  priceSale: number;
   selectedOptions: Record<string, number | undefined>;
 }
 
@@ -36,17 +34,20 @@ export interface ICart {
 }
 
 export interface IFormValues {
+  full_name?: string;
   first_name: string;
   last_name: string;
   email: string;
   phone: string;
   country: string;
   address: string;
+  order?: IOrder[];
   note: string;
   total: number;
   appliedCoupon: number;
   shippingMethod: string;
   paymentMethod: string;
+  timestamp?: number;
 }
 
 export interface ICategory {

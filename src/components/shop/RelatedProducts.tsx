@@ -15,7 +15,7 @@ const RelatedProducts: React.FC = () => {
         fetchProducts();
     }, [fetchCategory, fetchProducts]);
 
-    const specialProducts = products.filter(product => product.outstanding);
+    const specialProducts = products.filter(product => product.outstanding && product.status);
 
     return (
         <div>

@@ -1,6 +1,7 @@
 'use client'
 
 import TableCategory from "@/components/admin/TableCategory";
+import TableOrder from "@/components/admin/TableOrder";
 import TableProducts from "@/components/admin/TableProducts";
 import { Layout, Tabs, theme } from "antd";
 const { Header, Footer } = Layout;
@@ -37,7 +38,7 @@ const AdminPage = () => {
                         {
                             label: <p >Quản lý đơn hàng</p>,
                             key: '4',
-                            children: 'Tab 3',
+                            children: <TableOrder />,
                         },
                     ]}
                 />
