@@ -13,6 +13,7 @@ import RecommendProducts from './RecommendProducts';
 const { Text } = Typography;
 import { IOrder, IProduct } from '@/interfaces';
 import useSelectedOptions from '@/app/hooks/useSelectedOptions';
+import useTotalPrice from '@/app/hooks/useTotalPrice';
 import { useStoreCart } from '@/store/storeCart';
 import useQuantityInOrder from '@/app/hooks/useQuantity';
 import useNotification from '@/app/hooks/useNotification';
@@ -27,13 +28,7 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
     const { selectedOptions, handleOptionChange, getDefaultValue } = useSelectedOptions({});
     const { quantityInOrder, handleQuantityInOrder } = useQuantityInOrder();
     const { order, setOrder } = useStoreCart();
-
-    const selectedOptionPrices = Object.values(selectedOptions).filter(Boolean) as number[];
-    console.log(selectedOptionPrices);
-
-    const totalBasePrice = props.price + selectedOptionPrices.reduce((total, price) => total + price, 0);
-
-    const totalSalePrice = props.priceSale + selectedOptionPrices.reduce((total, price) => total + price, 0);
+    const [totalSalePrice, totalBasePrice] = useTotalPrice(props.price, props.priceSale, selectedOptions);
 
     const handleAddToCart = () => {
         const existingProductIndex = order.products.findIndex(
@@ -63,6 +58,8 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
         showNotification('success', 'Add to cart successfully', `Added ${quantityInOrder} ${props.name} to cart`);
     };
 
+    console.log("order", order)
+
     return (
         <div className="pt-24 pb-12 w-[895px] flex flex-col gap-16">
             <div className="flex gap-10">
@@ -75,8 +72,8 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
                         <p className='font-medium text-4xl capitalize'>{props.name}</p>
                         <p className='uppercase'>Sku: {props.code} </p>
                         <div className='flex gap-4'>
-                            <Text className='text-[#FE980F] font-bold text-xl'>${totalSalePrice}</Text>
-                            {props.priceSale > 0 && <Text className='text-[#a95d5d] text-lg' delete>${totalBasePrice}</Text>}
+                            <Text delete={props.priceSale > 0} className={`text-lg ${props.priceSale === 0 ? 'text-[#FE980F]' : 'text-[#a95d5d]'}`}>${totalBasePrice}</Text>
+                            {props.priceSale > 0 && <Text className='text-[#FE980F] font-bold text-xl'>${totalSalePrice}</Text>}
                         </div>
                     </div>
 
@@ -110,7 +107,7 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
                                         className='text-base text-[#9b9b9b]'
                                     >
                                         {attribute.options.map((option, optionIndex) => (
-                                            <Radio key={optionIndex} value={option.price} name={option.name}>
+                                            <Radio key={optionIndex} value={Number(option.price)} name={option.name}>
                                                 {option.name} (+${option.price})
                                             </Radio>
                                         ))}

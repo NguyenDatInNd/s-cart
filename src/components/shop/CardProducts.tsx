@@ -69,8 +69,8 @@ const CardProducts: React.FC<ICardProductsProps> = ({ small, ...props }) => {
             </button>
 
             <div className='flex flex-row justify-center w-full mt-1'>
-                {props.priceSale > 0 && <Text className='text-base pr-4  text-gray-500' delete>${props.priceSale}</Text>}
-                <Text className='text-base text-[#d9a1a3]'>${props.price}</Text>
+                <Text delete={props.priceSale > 0} className={`text-base pr-4 ${props.priceSale === 0 ? 'text-[#d9a1a3]' : 'text-gray-500 '}`}>${props.price}</Text>
+                {props.priceSale > 0 && <Text className='text-[#d9a1a3] text-base '>${props.priceSale}</Text>}
             </div>
 
             <div className='flex flex-row justify-center w-full mt-7 container-action'>

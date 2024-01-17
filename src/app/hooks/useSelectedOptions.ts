@@ -8,13 +8,13 @@ const useSelectedOptions = (
   const handleOptionChange = (attributeName: string, optionPrice: number) => {
     setSelectedOptions((prevSelectedOptions) => ({
       ...prevSelectedOptions,
-      [attributeName]: optionPrice,
+      [attributeName]: Number(optionPrice),
     }));
   };
 
   const getDefaultValue = (options: { name: string; price: number }[]) => {
-    const defaultOption = options.find((option) => option.price === 0);
-    return defaultOption ? defaultOption.price : undefined;
+    const defaultOption = options.find((option) => Number(option.price) === 0);
+    return defaultOption ? Number(defaultOption.price) : undefined;
   };
 
   return { selectedOptions, handleOptionChange, getDefaultValue };

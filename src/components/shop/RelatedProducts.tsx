@@ -38,8 +38,8 @@ const RelatedProducts: React.FC = () => {
                                     </Link>
 
                                     <div className='flex flex-row gap-4 w-full text-sm mt-1'>
-                                        {product.priceSale > 0 && <Text className='text-gray-500' delete>${product.priceSale}</Text>}
-                                        <Text className='text-[#d9a1a3]'>${product.price}</Text>
+                                        <Text delete={product.priceSale > 0} className={`${product.priceSale === 0 ? 'text-[#d9a1a3]' : 'text-gray-500 '}`}>${product.price}</Text>
+                                        {product.priceSale > 0 && <Text className='text-[#d9a1a3]'>${product.priceSale}</Text>}
                                     </div>
                                 </Space>
                             </div>

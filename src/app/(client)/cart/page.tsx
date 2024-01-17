@@ -52,14 +52,22 @@ const Cart: React.FC = () => {
         },
         {
             title: 'Price',
-            dataIndex: 'price',
-            key: 'price',
-            render: (_, { price }) => (
-                <div className='flex items-center gap-4'>
-                    <p className='text-[#15151580] font-extralight text-sm line-through'>{price[1]}</p>
-                    <p className='text-[#d9a1a3] text-sm'>{price[0]}</p>
-                </div>
-            )
+            children: [
+                {
+                    title: 'Price',
+                    dataIndex: 'product',
+                    key: 'priceSale',
+                    render: ({ priceSale, price }) => <p className={` ${priceSale > 0 ? "text-[#15151580] font-extralight text-sm line-through" : 'text-[#d9a1a3] text-sm'} `}>{price}</p>,
+                    width: 100,
+                },
+                {
+                    title: 'Price Sale',
+                    dataIndex: 'price',
+                    render: (price: number) => <p className='text-[#d9a1a3] text-sm'>{price > 0 && price}</p>,
+                    key: 'priceSale',
+                    width: 100,
+                },
+            ],
         },
         {
             title: 'Quantity',
@@ -89,8 +97,8 @@ const Cart: React.FC = () => {
             title: 'Subtotal',
             key: 'total',
             render: (_, record) => {
-                const { quantity, price } = record;
-                const subtotal = price[0] * quantity;
+                const { quantity, price, priceSale } = record;
+                const subtotal = priceSale > 0 ? quantity * priceSale : quantity * price;
                 return (
                     <Space className='w-full flex justify-between' size='large' direction='horizontal'>
                         <p className='ml-3'>${subtotal}</p>

@@ -45,9 +45,10 @@ const FormAddProduct: React.FC<IFormAddProduct> = ({ handleClose }) => {
             ...values,
             src: image,
             status: true,
-            price: values.price,
+            amount: Number(values.amount),
+            price: Number(values.price),
             outstanding: values.outstanding ?? false,
-            priceSale: Array.isArray(values.priceSale) ? values.priceSale[0] ?? 0 : 0,
+            priceSale: Array.isArray(values.priceSale) ? Number(values.priceSale[0]) ?? 0 : 0,
             attributes: values.attributes || [],
             timestamp: Date.now(),
         };
@@ -190,7 +191,7 @@ const FormAddProduct: React.FC<IFormAddProduct> = ({ handleClose }) => {
                     <Form.Item
                         name="src"
                         label="Ảnh sản phẩm"
-                        // rules={[{ required: true, message: 'Vui lòng chọn ảnh sản phẩm!' }]}
+                        rules={[{ required: true, message: 'Vui lòng chọn ảnh sản phẩm!' }]}
                         style={{ display: 'inline-block', width: '90%' }}
                     >
                         <Input type="file" onChange={handleUpload} value={image} />
