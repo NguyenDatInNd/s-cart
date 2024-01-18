@@ -18,11 +18,6 @@ const Review: React.FC = () => {
         message.error('Submit failed!');
     };
 
-    const onFill = () => {
-        form.setFieldsValue({
-            url: 'https://taobao.com/',
-        });
-    };
     return (
         <div className='flex flex-col gap-10'>
             <Space size='large' direction='vertical'>

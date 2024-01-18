@@ -31,13 +31,8 @@ const AdminPage = () => {
                             children: <TableCategory />,
                         },
                         {
-                            label: <p >Đánh giá sản phẩm</p>,
-                            key: '3',
-                            children: 'Tab 3',
-                        },
-                        {
                             label: <p >Quản lý đơn hàng</p>,
-                            key: '4',
+                            key: '3',
                             children: <TableOrder />,
                         },
                     ]}

@@ -1,11 +1,9 @@
-import { CloseOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input, Select, Space, Switch } from "antd"
-import { db, storage } from "@/firebase/firebase";
-import { doc, setDoc, addDoc, collection } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { useState } from "react";
+import { Button, Form, Input, Space } from "antd"
+import { db } from "@/firebase/firebase";
+import { addDoc, collection } from "firebase/firestore";
 import Image from "next/image";
 import useNotification from "@/app/hooks/useNotification";
+import useFileUpload from "@/app/hooks/useFileUpload";
 
 interface IFormAddCategory {
     handleClose: () => void;
@@ -13,8 +11,7 @@ interface IFormAddCategory {
 
 const FormAddCategory: React.FC<IFormAddCategory> = ({ handleClose }) => {
     const [form] = Form.useForm();
-    const [image, setImage] = useState('');
-    const [previewUrl, setPreviewUrl] = useState('');
+    const { previewUrl, image, handleUpload, setPreviewUrl } = useFileUpload('category');
 
     const showNotification = useNotification();
 
@@ -35,33 +32,6 @@ const FormAddCategory: React.FC<IFormAddCategory> = ({ handleClose }) => {
         handleClose();
         form.resetFields();
     };
-
-    function handleUpload(event: any) {
-        const file = event.target.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreviewUrl(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        const storageRef = ref(storage, `/category/${file.name + Date.now()}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-        uploadTask.on(
-            "state_changed",
-            (snapshot) => { },
-            (err) => console.log(err),
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                    setImage(url);
-                    setPreviewUrl(URL.createObjectURL(file));
-                });
-            }
-        );
-        event.target.value = null;
-    }
 
     return (
         <div>

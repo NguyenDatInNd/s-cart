@@ -1,16 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Modal, Popconfirm, Switch, Table } from 'antd';
+import { Button, Popconfirm, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { IProduct } from '@/interfaces';
 import FormAddProduct from './FormAddProduct';
 import Image from 'next/image';
 import useStoreShop from '@/store/storeShop';
-import { collection, deleteDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import useNotification from '@/app/hooks/useNotification';
+import ModalProduct from './ModalProduct';
+import FormEditProduct from './FormEditProduct';
+import useDocumentIDsByCode from '@/app/hooks/useDocumentIDsByCode';
 
 const TableProducts = () => {
-    const [isModal, setIsModal] = useState(false);
+    const [isModalAdd, setIsModalAdd] = useState(false);
+    const [isModalEdit, setIsModalEdit] = useState(false);
     const { fetchCategory, fetchProducts, products } = useStoreShop();
     const showNotification = useNotification();
 
@@ -38,18 +42,20 @@ const TableProducts = () => {
         {
             title: "Danh mục",
             dataIndex: "category",
-            render: (category: string) => <p>{category}</p>
+            render: (category: string) => <p>{category ?? ''}</p>
         },
         {
             title: 'Giá',
             dataIndex: 'price',
-            render: (price: number) => <p>{price}</p>
+            render: (price: number) => <p>{price}</p>,
+            width: 150,
         },
 
         {
             title: 'Giá khuyến mãi',
             dataIndex: 'priceSale',
-            render: (priceSale: number) => <p>{priceSale > 0 && priceSale}</p>
+            render: (priceSale: number) => <p>{priceSale > 0 && priceSale}</p>,
+            width: 150,
         },
         {
             title: 'Số lượng',
@@ -57,16 +63,15 @@ const TableProducts = () => {
             render: (amount: number) => <p>{amount}</p>
         },
         {
-            title: 'Trạng thái',
-            dataIndex: 'status',
-            render: (status: boolean) => <Switch checkedChildren="ON" unCheckedChildren="OFF" value={status} />
-        },
-        {
             title: 'Thao tác',
-            render: () => (
+            render: (_, record) => (
                 <div className='flex gap-3'>
-                    <Button type="primary">Sửa</Button>
-                    <Button type="primary" danger>Xem chi tiết</Button>
+                    <Button
+                        onClick={() => {
+                            setIsModalEdit(true)
+                            setRecordSelected(record)
+                        }}
+                        type="primary">Sửa / Xem</Button>
                 </div>
             ),
         }
@@ -80,7 +85,7 @@ const TableProducts = () => {
     }, [products]);
 
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-    const [documentIDs, setDocumentIDs] = useState<string[]>([]);
+    const [recordSelected, setRecordSelected] = useState<IProduct>();
 
     const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
         setSelectedRowKeys(newSelectedRowKeys);
@@ -97,24 +102,7 @@ const TableProducts = () => {
             .map((item) => item.code);
     }, [data, selectedRowKeys]);
 
-    useEffect(() => {
-        const getDocumentIDsByCode = async () => {
-            if (codeSelected.length > 0) {
-                const collectionRef = collection(db, 'products');
-                const q = query(collectionRef, where('code', 'in', codeSelected));
-
-                try {
-                    const querySnapshot = await getDocs(q);
-                    const documentIDs = querySnapshot.docs.map((doc) => doc.id);
-                    setDocumentIDs(documentIDs);
-                } catch (error) {
-                    console.error('Error getting document IDs:', error);
-                }
-            }
-        };
-
-        getDocumentIDsByCode();
-    }, [codeSelected]);
+    const documentIDs = useDocumentIDsByCode(codeSelected, 'products', 'code');
 
     const handleDeleteProduct = async () => {
         try {
@@ -138,7 +126,11 @@ const TableProducts = () => {
             <p className='text-3xl my-5'>Danh sách sản phẩm</p>
 
             <div className='flex w-full justify-end'>
-                <Button onClick={() => setIsModal(true)} type="primary" className='mr-5'>Thêm mới</Button>
+                <Button
+                    onClick={() => {
+                        setIsModalAdd(true)
+                    }}
+                    type="primary" className='mr-5'>Thêm mới</Button>
                 <Popconfirm
                     title="Are you sure to delete this product?"
                     onConfirm={() => handleDeleteProduct()}
@@ -155,15 +147,14 @@ const TableProducts = () => {
 
             <Table bordered rowSelection={rowSelection} columns={columns} dataSource={data} />
 
-            <Modal
-                title='Thêm sản phẩm'
-                open={isModal}
-                centered
-                onCancel={() => setIsModal(false)}
-                footer
-            >
-                <FormAddProduct handleClose={() => setIsModal(false)} />
-            </Modal>
+            <ModalProduct isModal={isModalAdd} title='Thêm sản phẩm' oncancel={() => setIsModalAdd(false)}>
+                <FormAddProduct handleClose={() => setIsModalAdd(false)} />
+            </ModalProduct>
+
+            <ModalProduct isModal={isModalEdit} title='Sửa sản phẩm' oncancel={() => setIsModalEdit(false)}>
+                <FormEditProduct record={recordSelected} handleClose={() => setIsModalEdit(false)} />
+            </ModalProduct>
+
         </div>
     );
 }

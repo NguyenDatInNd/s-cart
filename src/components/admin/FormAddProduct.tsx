@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import useNotification from "@/app/hooks/useNotification";
 import useStoreShop from "@/store/storeShop";
+import useFileUpload from "@/app/hooks/useFileUpload";
 
 interface IFormAddProduct {
     handleClose: () => void;
@@ -14,9 +15,8 @@ interface IFormAddProduct {
 
 const FormAddProduct: React.FC<IFormAddProduct> = ({ handleClose }) => {
     const [form] = Form.useForm();
-    const [image, setImage] = useState('');
-    const [previewUrl, setPreviewUrl] = useState('');
-    const { category, fetchCategory } = useStoreShop();
+    const { category, fetchCategory, docProductsRef } = useStoreShop();
+    const { previewUrl, image, handleUpload, setPreviewUrl } = useFileUpload('products');
 
     useEffect(() => {
         fetchCategory();
@@ -24,10 +24,9 @@ const FormAddProduct: React.FC<IFormAddProduct> = ({ handleClose }) => {
 
     const showNotification = useNotification();
 
-    const docRef = collection(db, 'products');
     const addProduct = async (product: any) => {
         try {
-            await addDoc(docRef, product);
+            await addDoc(docProductsRef, product);
             showNotification('success', 'Add new product successfully', `Added ${product.name} to shop`);
         } catch (error) {
             console.log(error);
@@ -58,33 +57,6 @@ const FormAddProduct: React.FC<IFormAddProduct> = ({ handleClose }) => {
         form.resetFields();
         setPreviewUrl('');
     };
-
-    function handleUpload(event: any) {
-        const file = event.target.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreviewUrl(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        const storageRef = ref(storage, `/products/${file.name + Date.now()}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-        uploadTask.on(
-            "state_changed",
-            (snapshot) => { },
-            (err) => console.log(err),
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                    setImage(url);
-                    setPreviewUrl(URL.createObjectURL(file));
-                });
-            }
-        );
-        event.target.value = null;
-    }
 
     return (
         <div>
@@ -122,7 +94,7 @@ const FormAddProduct: React.FC<IFormAddProduct> = ({ handleClose }) => {
                 <Form.Item
                     name="amount"
                     label="Số lượng"
-                    rules={[{ required: true, min: 1, message: 'Vui lòng nhập số lượng!' }]}
+                    rules={[{ required: true, message: 'Vui lòng nhập số lượng!' }]}
                     style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
                 >
                     <Input type='number' placeholder='Nhập số lượng' />

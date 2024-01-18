@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Modal, Table } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Button, Modal, Popconfirm, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { ICategory } from '@/interfaces';
 import FormAddCategory from './FormAddCategory';
 import Image from 'next/image';
 import useStoreShop from '@/store/storeShop';
+import useDocumentIDsByCode from '@/app/hooks/useDocumentIDsByCode';
+import { deleteDoc, doc } from 'firebase/firestore';
+import { db } from '@/firebase/firebase';
+import useNotification from '@/app/hooks/useNotification';
 
 const TableCategory = () => {
     const [isModal, setIsModal] = useState(false);
     const { category, fetchCategory } = useStoreShop();
+    const showNotification = useNotification();
 
     useEffect(() => {
         fetchCategory();
@@ -25,16 +30,10 @@ const TableCategory = () => {
             dataIndex: 'name',
         },
         {
-            title: 'Trạng thái',
-            dataIndex: 'status',
-            render: (status: boolean) => <p className={`${status ? 'bg-green-500' : 'bg-red-500'}`}>{status}</p>
-        },
-        {
             title: 'Thao tác',
             render: () => (
                 <>
-                    <Button type="primary">Sửa</Button>
-                    <Button type="primary" danger>Xóa</Button>
+                    <Button type="primary">Sửa/Xem</Button>
                 </>
             ),
         }
@@ -50,7 +49,6 @@ const TableCategory = () => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
     const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-        console.log('selectedRowKeys changed: ', newSelectedRowKeys);
         setSelectedRowKeys(newSelectedRowKeys);
     };
 
@@ -58,13 +56,46 @@ const TableCategory = () => {
         selectedRowKeys,
         onChange: onSelectChange,
     };
+
+    const codeSelected = useMemo(() => {
+        return data
+            .filter((item) => selectedRowKeys.includes(item.key))
+            .map((item) => item.name);
+    }, [data, selectedRowKeys]);
+
+    const documentIDs = useDocumentIDsByCode(codeSelected, 'category', 'name');
+
+    const handleDeleteCategory = async () => {
+        try {
+            const batch: Promise<void>[] = [];
+            documentIDs.forEach((documentID) => {
+                const documentRef = doc(db, 'category', documentID);
+                batch.push(deleteDoc(documentRef));
+            });
+
+            await Promise.all(batch);
+            showNotification('success', 'Category deleted', '');
+            setSelectedRowKeys([]);
+            fetchCategory();
+        } catch (error) {
+            console.error('Error deleting documents:', error);
+        }
+    }
+
     return (
         <div className='my-5 mx-10' >
             <p className='text-3xl my-5'>Danh mục sản phẩm</p>
 
             <div className='flex w-full justify-end'>
                 <Button onClick={() => setIsModal(true)} type="primary" className='mr-5'>Thêm mới</Button>
-                <Button type="primary" danger>Xóa</Button>
+                <Popconfirm
+                    title="Are you sure to delete this product?"
+                    onConfirm={() => handleDeleteCategory()}
+                    okText='Yes'
+                    cancelText="No"
+                >
+                    <Button type="primary" danger>Xóa</Button>
+                </Popconfirm>
             </div>
 
             <span style={{ marginLeft: 8 }}>

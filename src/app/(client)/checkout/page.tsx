@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Space, Table, Button, Select, Row, Col, Radio } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { GiShoppingBag } from "react-icons/gi";
