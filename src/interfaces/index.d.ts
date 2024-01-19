@@ -57,3 +57,20 @@ export interface ICategory {
   description: string;
   status: boolean;
 }
+
+export interface AttributeOption {
+  price: string;
+  name: string;
+}
+
+export interface Attribute {
+  name: string;
+  options: AttributeOption[];
+}
+
+export interface RenderProps {
+  name: string;
+  code: string;
+  src: string;
+  selectedOptions: { [key: string]: AttributeOption };
+}

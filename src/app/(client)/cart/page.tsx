@@ -9,19 +9,12 @@ import Image from "next/image"
 import Link from 'next/link';
 import BreadcrumbApp from '@/components/breadcrumb/BreadcrumbApp';
 import { useStoreCart } from '@/store/storeCart';
-import { IOrder } from '@/interfaces';
+import { IOrder, RenderProps } from '@/interfaces';
 import useNotification from '@/app/hooks/useNotification';
 
 const Cart: React.FC = () => {
     const showNotification = useNotification();
     const { order, deleteOrder, increaseQuantity, decreaseQuantity, setQuantity } = useStoreCart();
-
-    // const attribute: Attribute[] = [
-    //     { name: "Màu sắc", options: [{ name: "Đỏ", price: 10 }, { name: "Trắng", price: 0 }] },
-    //     { name: "Khối lượng", options: [{ name: "0.5kg", price: 10 }, { name: "0.1kg", price: 0 }] }
-    // ];
-
-    // const selectedOptions = { "Màu sắc": "10", "Khối lượng": "10" };
 
     const columns: ColumnsType<IOrder> = [
         {
@@ -33,7 +26,7 @@ const Cart: React.FC = () => {
             title: 'Name',
             dataIndex: 'product',
             key: 'product',
-            render: ({ name, code, src, selectedOptions, attribute }) => (
+            render: ({ name, code, src, selectedOptions }: RenderProps) => (
                 <>
                     <div className='flex gap-4 mb-3'>
                         <Link className='ImageContainer' href={`/detail/${code.replace(/\s+/g, '-').toLowerCase()}`}>
@@ -48,8 +41,8 @@ const Cart: React.FC = () => {
                     <div className='flex flex-col gap-1'>
                         <p className='text-base uppercase'>SKU: {code}</p>
                         <div>
-                            {Object.entries(selectedOptions).map(([attributeName, optionName]) => (
-                                <p key={attributeName}>{`${attributeName}: ${optionName}`}</p>
+                            {Object.entries(selectedOptions).map(([attributeName, option]) => (
+                                <p key={attributeName}>{`${attributeName}: ${option.name} (+$${option.price})`}</p>
                             ))}
                         </div>
                     </div>

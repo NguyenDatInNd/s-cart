@@ -7,14 +7,25 @@ const useTotalPrice = (
     Boolean
   ) as number[];
 
-  const totalBasePrice =
-    basePrice + selectedOptionPrices.reduce((total, price) => total + price, 0);
+  const totalBasePrice = Object.values(selectedOptions).reduce(
+    (acc: number, option: any) => {
+      if (option && option.price) {
+        return acc + Number(option.price);
+      }
+      return acc;
+    },
+    basePrice
+  );
 
-  const totalSalePrice =
-    salePrice > 0
-      ? salePrice +
-        selectedOptionPrices.reduce((total, price) => total + price, 0)
-      : 0;
+  const totalSalePrice = Object.values(selectedOptions).reduce(
+    (acc: number, option: any) => {
+      if (option && option.price) {
+        return acc + Number(option.price);
+      }
+      return acc;
+    },
+    salePrice
+  );
 
   return [totalSalePrice, totalBasePrice] as const;
 };

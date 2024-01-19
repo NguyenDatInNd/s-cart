@@ -15,7 +15,7 @@ import { RiCoupon3Fill } from "react-icons/ri";
 import { FaShippingFast } from "react-icons/fa";
 import { MdOutlinePayment } from "react-icons/md";
 import { countries } from '@/components/country';
-import { IFormValues, IOrder } from '@/interfaces';
+import { IFormValues, IOrder, RenderProps } from '@/interfaces';
 import { useStoreCart } from '@/store/storeCart';
 import { useStoreFormInfor } from '@/store/storeFormInfor';
 import { useRouter } from 'next/navigation'
@@ -58,7 +58,7 @@ const Checkout: React.FC = () => {
             title: 'Name',
             dataIndex: 'product',
             key: 'product',
-            render: ({ name, code, src }) => (
+            render: ({ name, code, src, selectedOptions }: RenderProps) => (
                 <>
                     <div className='flex gap-4 mb-3'>
                         <Image src={src} width={100} height={80} alt={name} />
@@ -68,9 +68,9 @@ const Checkout: React.FC = () => {
                     <div className='flex flex-col gap-1'>
                         <p className='text-base uppercase'>SKU: {code}</p>
                         <div>
-                            {/* {attributes && Object.keys(attributes).map((key) => (
-                                <span key={key} className='text-sm mr-2'>{key}: {attributes[key]}</span>
-                            ))} */}
+                            {Object.entries(selectedOptions).map(([attributeName, option]) => (
+                                <p key={attributeName}>{`${attributeName}: ${option.name} (+$${option.price})`}</p>
+                            ))}
                         </div>
                     </div>
                 </>

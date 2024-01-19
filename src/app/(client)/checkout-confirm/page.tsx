@@ -6,7 +6,7 @@ import type { ColumnsType } from 'antd/es/table';
 import { GiShoppingBag } from "react-icons/gi";
 import Image from "next/image"
 import BreadcrumbApp from '@/components/breadcrumb/BreadcrumbApp';
-import { IOrder } from '@/interfaces';
+import { IOrder, RenderProps } from '@/interfaces';
 import { useStoreCart } from '@/store/storeCart';
 import { useStoreFormInfor } from '@/store/storeFormInfor';
 import { FaShippingFast } from 'react-icons/fa';
@@ -79,7 +79,7 @@ const CheckoutConfirm: React.FC = () => {
             title: 'Name',
             dataIndex: 'product',
             key: 'product',
-            render: ({ name, src }) => (
+            render: ({ name, src, selectedOptions }: RenderProps) => (
                 <>
                     <div className='flex gap-4 mb-3'>
                         <Image src={src} width={100} height={80} alt={name} />
@@ -87,9 +87,9 @@ const CheckoutConfirm: React.FC = () => {
                     </div>
 
                     <div className='flex flex-col gap-1'>
-                        {/* {attributes && Object.keys(attributes).map((key) => (
-                                <span key={key} className='text-sm mr-2'>{key}: {attributes[key]}</span>
-                            ))} */}
+                        {Object.entries(selectedOptions).map(([attributeName, option]) => (
+                            <p key={attributeName}>{`${attributeName}: ${option.name} (+$${option.price})`}</p>
+                        ))}
                     </div>
                 </>
 

@@ -105,7 +105,7 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
                                         className='text-base text-[#9b9b9b]'
                                     >
                                         {attribute.options.map((option, optionIndex) => (
-                                            <Radio key={optionIndex} value={Number(option.price)} name={option.name}>
+                                            <Radio key={optionIndex} value={option}>
                                                 {option.name} (+${option.price})
                                             </Radio>
                                         ))}
