@@ -20,7 +20,7 @@ const CardProducts: React.FC<ICardProductsProps> = ({ small, ...props }) => {
     const showNotification = useNotification();
     const { order, setOrder } = useStoreCart();
     const { selectedOptions } = useSelectedOptions({});
-    const { quantityInOrder } = useQuantityInOrder();
+    const { quantityInOrder } = useQuantityInOrder(props.amount);
 
     const handleAddToCart = () => {
         const existingProductIndex = order.products.findIndex(

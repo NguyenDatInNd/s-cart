@@ -26,7 +26,7 @@ enum QuantityChangeAction {
 const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
     const showNotification = useNotification();
     const { selectedOptions, handleOptionChange, getDefaultValue } = useSelectedOptions({});
-    const { quantityInOrder, handleQuantityInOrder } = useQuantityInOrder();
+    const { quantityInOrder, handleQuantityInOrder } = useQuantityInOrder(props.amount);
     const { order, setOrder } = useStoreCart();
     const [totalSalePrice, totalBasePrice] = useTotalPrice(props.price, props.priceSale, selectedOptions);
 
@@ -112,7 +112,7 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
                                     </Radio.Group>
                                 </div>
                             ))}
-                            <p>Stock status:{props.amount}</p>
+                            <p>Stock status: {props.amount}</p>
                             <p>Category: <span className='text-[#d9a1a3]'>{props.category}</span> </p>
                         </div>
 

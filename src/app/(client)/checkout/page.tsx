@@ -158,15 +158,15 @@ const Checkout: React.FC = () => {
                                 <Space direction='horizontal'>
                                     <Form.Item
                                         name="email"
-                                        rules={[{ required: true, message: 'Vui lòng nhập email!' }]}
+                                        rules={[{ required: true, message: 'Vui lòng nhập email!', type: 'email' }]}
                                         label={<p className='flex items-center gap-1'><MailFilled /> Email</p>}
                                     >
-                                        <Input placeholder='Email' />
+                                        <Input type='email' placeholder='Email' />
                                     </Form.Item>
 
                                     <Form.Item
                                         name="phone"
-                                        rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
+                                        rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!', min: 10, max: 10 }]}
                                         label={<p className='flex items-center gap-1'><FaPhone /> Phone</p>}
                                     >
                                         <Input placeholder='Phone' />

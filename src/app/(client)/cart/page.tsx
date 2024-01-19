@@ -118,17 +118,29 @@ const Cart: React.FC = () => {
     ];
 
     const handleQuantityChange = (record: IOrder, action: 'increase' | 'decrease') => {
+        const maxQuantity = record.product.amount;
+        const currentQuantity = record.quantity;
         if (action === 'increase') {
-            increaseQuantity(record);
+            if (currentQuantity < maxQuantity) {
+                increaseQuantity(record);
+            } else {
+                showNotification('warning', 'Maximum quantity reached', 'Cannot add more items to the order.');
+            }
         } else {
-            decreaseQuantity(record);
+            if (currentQuantity > 1) {
+                decreaseQuantity(record);
+            }
         }
     };
 
     const handleQuantityInputChange = (record: IOrder, event: React.ChangeEvent<HTMLInputElement>) => {
+        const maxQuantity = record.product.amount;
         const inputValue = parseInt(event.target.value, 10);
         if (!isNaN(inputValue) && inputValue >= 1) {
-            setQuantity(record, inputValue);
+            if (inputValue > maxQuantity) {
+                showNotification('warning', 'Maximum quantity reached', 'Cannot add more items to the order.');
+                setQuantity(record, maxQuantity);
+            } else setQuantity(record, inputValue);
         }
     };
 

@@ -67,7 +67,7 @@ const Review: React.FC = () => {
                         className='review-form'
                         name="review"
                         label="Your review"
-                        rules={[{ required: true }, { type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
+                        rules={[{ required: true }, { type: 'string', min: 6 }]}
                     >
                         <Input.TextArea rows={3} />
                     </Form.Item>
