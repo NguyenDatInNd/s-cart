@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Modal, Popconfirm, Table } from 'antd';
+import { Button, Popconfirm, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { ICategory } from '@/interfaces';
 import FormAddCategory from './FormAddCategory';
@@ -9,11 +9,14 @@ import useDocumentIDsByCode from '@/app/hooks/useDocumentIDsByCode';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import useNotification from '@/app/hooks/useNotification';
+import ModalProduct, { titleCategory } from './ModalProduct';
+import FormEditCategory from './FormEditCategory';
 
 const TableCategory = () => {
     const [isModal, setIsModal] = useState(false);
     const { category, fetchCategory } = useStoreShop();
     const showNotification = useNotification();
+    const [title, setTitle] = useState<titleCategory>('Thêm danh mục');
 
     useEffect(() => {
         fetchCategory();
@@ -31,11 +34,13 @@ const TableCategory = () => {
         },
         {
             title: 'Thao tác',
-            render: () => (
-                <>
-                    <Button type="primary">Sửa/Xem</Button>
-                </>
-            ),
+            render: (_, record) =>
+                <Button onClick={() => {
+                    setIsModal(true)
+                    setTitle('Sửa danh mục')
+                    setRecordSelected(record)
+                }}
+                    type="primary">Sửa/Xem</Button>
         }
     ];
 
@@ -47,6 +52,7 @@ const TableCategory = () => {
     })
 
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [recordSelected, setRecordSelected] = useState<ICategory>();
 
     const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
         setSelectedRowKeys(newSelectedRowKeys);
@@ -104,15 +110,10 @@ const TableCategory = () => {
 
             <Table bordered rowSelection={rowSelection} columns={columns} dataSource={data} />
 
-            <Modal
-                title='Thêm danh mục sản phẩm'
-                open={isModal}
-                centered
-                onCancel={() => setIsModal(false)}
-                footer
-            >
-                <FormAddCategory handleClose={() => setIsModal(false)} />
-            </Modal>
+            <ModalProduct isModal={isModal} title={title} oncancel={() => setIsModal(false)}>
+                {title === 'Thêm danh mục' && <FormAddCategory handleClose={() => setIsModal(false)} />}
+                {title === 'Sửa danh mục' && <FormEditCategory record={recordSelected} handleClose={() => setIsModal(false)} />}
+            </ModalProduct>
         </div>
     )
 }

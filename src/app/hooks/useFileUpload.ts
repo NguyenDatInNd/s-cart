@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "@/firebase/firebase";
+import { ICategory, IProduct } from "@/interfaces";
 
-const useFileUpload = (position: string) => {
-  const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
-  const [image, setImage] = useState<string | undefined>(undefined);
+const useFileUpload = (
+  position: string,
+  record: IProduct | ICategory | undefined
+) => {
+  const [previewUrl, setPreviewUrl] = useState<string | undefined>(record?.src);
+  const [image, setImage] = useState<string | undefined>(record?.src);
 
   const handleUpload = (event: any) => {
     const file = event.target.files[0];

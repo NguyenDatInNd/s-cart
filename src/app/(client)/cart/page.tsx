@@ -16,6 +16,13 @@ const Cart: React.FC = () => {
     const showNotification = useNotification();
     const { order, deleteOrder, increaseQuantity, decreaseQuantity, setQuantity } = useStoreCart();
 
+    // const attribute: Attribute[] = [
+    //     { name: "Màu sắc", options: [{ name: "Đỏ", price: 10 }, { name: "Trắng", price: 0 }] },
+    //     { name: "Khối lượng", options: [{ name: "0.5kg", price: 10 }, { name: "0.1kg", price: 0 }] }
+    // ];
+
+    // const selectedOptions = { "Màu sắc": "10", "Khối lượng": "10" };
+
     const columns: ColumnsType<IOrder> = [
         {
             title: 'No.',
@@ -41,13 +48,12 @@ const Cart: React.FC = () => {
                     <div className='flex flex-col gap-1'>
                         <p className='text-base uppercase'>SKU: {code}</p>
                         <div>
-                            {/* {selectedOptions && selectedOptions.map((option, index) => (
-                                <p className='text-base' key={index}>{option.name}: {option.value}</p>
-                            ))} */}
+                            {Object.entries(selectedOptions).map(([attributeName, optionName]) => (
+                                <p key={attributeName}>{`${attributeName}: ${optionName}`}</p>
+                            ))}
                         </div>
                     </div>
                 </>
-
             )
         },
         {

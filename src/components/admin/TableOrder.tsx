@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Modal, Switch, Table } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Button, Modal, Popconfirm, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { IFormValues } from '@/interfaces';
 import FormAddProduct from './FormAddProduct';
 import useStoreAdmin from '@/store/storeAdmin';
+import useDocumentIDsByCode from '@/app/hooks/useDocumentIDsByCode';
+import { deleteDoc, doc } from 'firebase/firestore';
+import { db } from '@/firebase/firebase';
+import useNotification from '@/app/hooks/useNotification';
+import FormDetailOrder from './FormDetailOrder';
 
 const TableOrder = () => {
     const [isModal, setIsModal] = useState(false);
     const { form, fetchForm } = useStoreAdmin();
+    const showNotification = useNotification();
+    const [recordSelected, setRecordSelected] = useState<IFormValues>();
 
     useEffect(() => {
         fetchForm();
@@ -52,12 +59,10 @@ const TableOrder = () => {
         },
         {
             title: 'Thao tác',
-            render: () => (
-                <>
-                    <Button type="primary">Sửa</Button>
-                    <Button type="primary" danger>Xóa</Button>
-                </>
-            ),
+            render: (_, record) => <Button onClick={() => {
+                setRecordSelected(record)
+                setIsModal(true)
+            }} type="primary">Xem đơn hàng</Button>
         }
     ];
 
@@ -71,7 +76,6 @@ const TableOrder = () => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
     const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-        console.log('selectedRowKeys changed: ', newSelectedRowKeys);
         setSelectedRowKeys(newSelectedRowKeys);
     };
 
@@ -80,13 +84,44 @@ const TableOrder = () => {
         onChange: onSelectChange,
     };
 
+    const codeSelected = useMemo(() => {
+        return data
+            .filter((item) => selectedRowKeys.includes(item.key))
+            .map((item) => item.orderCode);
+    }, [data, selectedRowKeys]);
+
+    const documentIDs = useDocumentIDsByCode(codeSelected.filter((orderCode) => orderCode !== undefined) as string[], 'order', 'orderCode');
+
+    const handleDeleteOrder = async () => {
+        try {
+            const batch: Promise<void>[] = [];
+            documentIDs.forEach((documentID) => {
+                const documentRef = doc(db, 'order', documentID);
+                batch.push(deleteDoc(documentRef));
+            });
+
+            await Promise.all(batch);
+            showNotification('success', 'Order deleted', '');
+            setSelectedRowKeys([]);
+            fetchForm();
+        } catch (error) {
+            console.error('Error deleting documents:', error);
+        }
+    }
+
     return (
         <div className='my-5 mx-10' >
             <p className='text-3xl my-5'>Danh sách đơn đặt hàng</p>
 
             <div className='flex w-full justify-end'>
-                <Button onClick={() => setIsModal(true)} type="primary" className='mr-5'>Thêm mới</Button>
-                <Button type="primary" danger>Xóa</Button>
+                <Popconfirm
+                    title="Are you sure to delete this product?"
+                    onConfirm={() => handleDeleteOrder()}
+                    okText='Yes'
+                    cancelText="No"
+                >
+                    <Button type="primary" danger>Xóa</Button>
+                </Popconfirm>
             </div>
 
             <span style={{ marginLeft: 8 }}>
@@ -96,13 +131,13 @@ const TableOrder = () => {
             <Table bordered rowSelection={rowSelection} columns={columns} dataSource={data} />
 
             <Modal
-                title='Thêm sản phẩm'
+                title='Xem đơn hàng'
                 open={isModal}
                 centered
                 onCancel={() => setIsModal(false)}
                 footer
             >
-                <FormAddProduct handleClose={() => setIsModal(false)} />
+                <FormDetailOrder record={recordSelected} />
             </Modal>
         </div>
     );

@@ -58,9 +58,12 @@ const HeaderApp: React.FC = () => {
                 open={isModalOpen}
                 onOk={() => setIsModalOpen(false)}
                 onCancel={() => setIsModalOpen(false)}
+                destroyOnClose
                 footer={null}
             >
-                <SearchInput placeholder="input search text" style={{ width: '100%' }} />
+                {isModalOpen && <div className='search-input'>
+                    <SearchInput handleClose={() => setIsModalOpen(false)} />
+                </div>}
             </Modal>
         </header>
     );

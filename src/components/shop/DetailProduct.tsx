@@ -85,7 +85,7 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
                                 <button className='w-8 h-8 text-xl bg-[#ebebeb] text-[#151515] rounded-md flex justify-center items-center' onClick={() => handleQuantityInOrder(QuantityChangeAction.Increase)}>
                                     <PlusOutlined className='subtext-footer' />
                                 </button>
-                                <button className='w-8 h-8 text-xl bg-[#ebebeb] text-[#151515] rounded-md flex justify-center items-center' onClick={() => handleQuantityInOrder(QuantityChangeAction.Increase)}>
+                                <button className='w-8 h-8 text-xl bg-[#ebebeb] text-[#151515] rounded-md flex justify-center items-center' onClick={() => handleQuantityInOrder(QuantityChangeAction.Decrease)}>
                                     <MinusOutlined className='subtext-footer' />
                                 </button>
                             </div>
@@ -112,7 +112,7 @@ const DetailProduct: React.FC<IProduct> = ({ ...props }) => {
                                     </Radio.Group>
                                 </div>
                             ))}
-                            <p>Stock status: In stock</p>
+                            <p>Stock status:{props.amount}</p>
                             <p>Category: <span className='text-[#d9a1a3]'>{props.category}</span> </p>
                         </div>
 

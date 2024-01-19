@@ -20,7 +20,6 @@ const CardProducts: React.FC<ICardProductsProps> = ({ small, ...props }) => {
     const showNotification = useNotification();
     const { order, setOrder } = useStoreCart();
     const { selectedOptions } = useSelectedOptions({});
-    const [totalSalePrice, totalBasePrice] = useTotalPrice(props.priceSale, props.price, selectedOptions);
     const { quantityInOrder } = useQuantityInOrder();
 
     const handleAddToCart = () => {
@@ -41,8 +40,6 @@ const CardProducts: React.FC<ICardProductsProps> = ({ small, ...props }) => {
                     selectedOptions: selectedOptions,
                 },
                 quantity: quantityInOrder,
-                price: totalBasePrice,
-                priceSale: totalSalePrice,
                 selectedOptions: selectedOptions,
             };
 

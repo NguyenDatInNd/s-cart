@@ -1,8 +1,9 @@
 import { Modal } from "antd"
-export type title = 'Thêm sản phẩm' | 'Sửa sản phẩm' | 'Xem chi tiết sản phẩm'
+export type titleProduct = 'Thêm sản phẩm' | 'Sửa sản phẩm' | 'Xem chi tiết sản phẩm'
+export type titleCategory = 'Thêm danh mục' | 'Sửa danh mục' | 'Xem chi tiết danh mục'
 
 interface IModalProduct {
-    title: title;
+    title: titleProduct | titleCategory;
     children: React.ReactNode;
     isModal: boolean;
     oncancel: () => void;

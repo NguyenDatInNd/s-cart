@@ -8,15 +8,15 @@ import useStoreShop from '@/store/storeShop';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import useNotification from '@/app/hooks/useNotification';
-import ModalProduct from './ModalProduct';
+import ModalProduct, { titleProduct } from './ModalProduct';
 import FormEditProduct from './FormEditProduct';
 import useDocumentIDsByCode from '@/app/hooks/useDocumentIDsByCode';
 
 const TableProducts = () => {
-    const [isModalAdd, setIsModalAdd] = useState(false);
-    const [isModalEdit, setIsModalEdit] = useState(false);
+    const [isModal, setIsModal] = useState(false);
     const { fetchCategory, fetchProducts, products } = useStoreShop();
     const showNotification = useNotification();
+    const [title, setTitle] = useState<titleProduct>('Thêm sản phẩm');
 
     useEffect(() => {
         fetchCategory();
@@ -64,16 +64,14 @@ const TableProducts = () => {
         },
         {
             title: 'Thao tác',
-            render: (_, record) => (
-                <div className='flex gap-3'>
-                    <Button
-                        onClick={() => {
-                            setIsModalEdit(true)
-                            setRecordSelected(record)
-                        }}
-                        type="primary">Sửa / Xem</Button>
-                </div>
-            ),
+            render: (_, record) =>
+                <Button
+                    onClick={() => {
+                        setIsModal(true)
+                        setTitle('Sửa sản phẩm')
+                        setRecordSelected(record)
+                    }}
+                    type="primary">Sửa / Xem</Button>
         }
     ];
 
@@ -128,7 +126,8 @@ const TableProducts = () => {
             <div className='flex w-full justify-end'>
                 <Button
                     onClick={() => {
-                        setIsModalAdd(true)
+                        setIsModal(true)
+                        setTitle('Thêm sản phẩm')
                     }}
                     type="primary" className='mr-5'>Thêm mới</Button>
                 <Popconfirm
@@ -147,14 +146,10 @@ const TableProducts = () => {
 
             <Table bordered rowSelection={rowSelection} columns={columns} dataSource={data} />
 
-            <ModalProduct isModal={isModalAdd} title='Thêm sản phẩm' oncancel={() => setIsModalAdd(false)}>
-                <FormAddProduct handleClose={() => setIsModalAdd(false)} />
+            <ModalProduct isModal={isModal} title={title} oncancel={() => setIsModal(false)}>
+                {title === 'Thêm sản phẩm' && <FormAddProduct handleClose={() => setIsModal(false)} />}
+                {title === 'Sửa sản phẩm' && <FormEditProduct record={recordSelected} handleClose={() => setIsModal(false)} />}
             </ModalProduct>
-
-            <ModalProduct isModal={isModalEdit} title='Sửa sản phẩm' oncancel={() => setIsModalEdit(false)}>
-                <FormEditProduct record={recordSelected} handleClose={() => setIsModalEdit(false)} />
-            </ModalProduct>
-
         </div>
     );
 }

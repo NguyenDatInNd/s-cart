@@ -44,9 +44,13 @@ const CheckoutConfirm: React.FC = () => {
             ...form, timestamp: Date.now(),
             orderCode: orderCode,
             note: form.note ?? '',
+            total: form.total + form.total * 0.1 - form.appliedCoupon,
             order: order.products,
             full_name: `${form.first_name} ${form.last_name}`
         }
+
+        // console.log(newForm);
+
         addOrder(newForm)
     }
 

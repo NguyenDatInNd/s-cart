@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Select } from 'antd';
-import type { SelectProps } from 'antd';
+import { AutoComplete, Select } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import useStoreShop from '@/store/storeShop';
 import Image from 'next/image'
 import Link from 'next/link';
 
-const SearchInput: React.FC<{ placeholder: string; style: React.CSSProperties }> = (props) => {
-    const [data, setData] = useState<SelectProps['options']>([]);
+interface ISearchInput {
+    handleClose: () => void;
+}
+const { Option } = AutoComplete;
+
+const SearchInput: React.FC<ISearchInput> = ({ handleClose }) => {
+    const [data, setData] = useState([]);
     const [value, setValue] = useState<string>();
     const { products, fetchProducts } = useStoreShop();
 
@@ -15,64 +19,49 @@ const SearchInput: React.FC<{ placeholder: string; style: React.CSSProperties }>
         fetchProducts();
     }, [fetchProducts]);
 
-    const handleSearch = (newValue: string) => {
-        fetch(newValue, setData);
+    const handleSearch = (inputValue: string) => {
+        const result: any = products
+            .filter((product) => product.name.toLowerCase().includes(inputValue.toLowerCase()))
+            .map((product) => ({
+                value: product.code,
+                label: (
+                    <Link href={`/detail/${product.code.replace(/\s+/g, '-').toLowerCase()}`}>
+                        <div className='flex gap-2 items-center text-base'>
+                            <Image src={product.src} alt={product.name} width={30} height={20} />
+                            {product.name}
+                        </div>
+                    </Link>
+                ),
+            }));
+
+        setData(result);
     };
 
-
-    let timeout: ReturnType<typeof setTimeout> | null;
-    let currentValue: string;
-
-    const fetch = (value: string, callback: Function) => {
-        if (timeout) {
-            clearTimeout(timeout);
-            timeout = null;
-        }
-        currentValue = value;
-
-        const query = () => {
-            if (currentValue === value) {
-                const result = products
-                    .filter((product) => product.name.toLowerCase().includes(value.toLowerCase()))
-                    .map((product) => ({
-                        value: product.code,
-                        label:
-                            <Link href={`/detail/${product.code.replace(/\s+/g, '-').toLowerCase()}`}>
-                                <div className='flex gap-2 items-center text-base'>
-                                    <Image src={product.src} alt={product.name} width={30} height={20} />
-                                    {product.name}
-                                </div>
-                            </Link>
-                    }));
-                callback(result);
-            }
-        };
-
-        timeout = setTimeout(query, 300);
+    const onSelect = (selectedValue: string) => {
+        setValue(selectedValue);
+        handleClose();
     };
 
-
-    const handleChange = (newValue: string) => {
-        setValue(newValue);
-    };
+    const renderOption = (item: any) => (
+        <Option key={item.value} value={item.value}>
+            {item.label}
+        </Option>
+    );
 
     return (
-        <Select
-            showSearch
+        <AutoComplete
+            style={{ width: '100%' }}
             value={value}
-            placeholder={props.placeholder}
-            style={props.style}
+            placeholder="Nhập sản phẩm cần tìm kiếm"
             defaultActiveFirstOption={false}
             suffixIcon={<SearchOutlined />}
             filterOption={false}
             onSearch={handleSearch}
-            onChange={handleChange}
-            notFoundContent={null}
-            options={(data || []).map((d) => ({
-                value: d.value,
-                label: d.label,
-            }))}
-        />
+            onSelect={onSelect}
+            notFoundContent="Không tìm thấy sản phẩm"
+        >
+            {data.map(renderOption)}
+        </AutoComplete>
     );
 };
 

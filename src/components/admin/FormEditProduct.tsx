@@ -16,8 +16,8 @@ interface IFormEditProduct {
 
 const FormEditProduct: React.FC<IFormEditProduct> = ({ record, handleClose }) => {
     const [form] = Form.useForm();
-    const { category, fetchCategory, } = useStoreShop();
-    const { previewUrl, image, handleUpload, setPreviewUrl } = useFileUpload('products');
+    const { category, fetchCategory } = useStoreShop();
+    const { previewUrl, image, handleUpload, setPreviewUrl } = useFileUpload('products', record);
 
     useEffect(() => {
         fetchCategory();

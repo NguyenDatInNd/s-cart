@@ -16,7 +16,7 @@ interface IFormAddProduct {
 const FormAddProduct: React.FC<IFormAddProduct> = ({ handleClose }) => {
     const [form] = Form.useForm();
     const { category, fetchCategory, docProductsRef } = useStoreShop();
-    const { previewUrl, image, handleUpload, setPreviewUrl } = useFileUpload('products');
+    const { previewUrl, image, handleUpload, setPreviewUrl } = useFileUpload('products', undefined);
 
     useEffect(() => {
         fetchCategory();

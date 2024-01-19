@@ -48,6 +48,7 @@ export interface IFormValues {
   shippingMethod: string;
   paymentMethod: string;
   timestamp?: number;
+  orderCode?: string;
 }
 
 export interface ICategory {

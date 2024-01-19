@@ -11,7 +11,7 @@ interface IFormAddCategory {
 
 const FormAddCategory: React.FC<IFormAddCategory> = ({ handleClose }) => {
     const [form] = Form.useForm();
-    const { previewUrl, image, handleUpload, setPreviewUrl } = useFileUpload('category');
+    const { previewUrl, image, handleUpload, setPreviewUrl } = useFileUpload('category', undefined);
 
     const showNotification = useNotification();
 
@@ -52,7 +52,7 @@ const FormAddCategory: React.FC<IFormAddCategory> = ({ handleClose }) => {
                 <Form.Item
                     name="description"
                     label="Mô tả"
-                    rules={[{ required: true, message: 'Vui lòng nhập mô tả  danh mục!' }]}
+                    rules={[{ required: true, message: 'Vui lòng nhập mô tả danh mục!' }]}
                     style={{ display: 'inline-block', width: 'calc(100% - 8px)' }}
                 >
                     <Input.TextArea placeholder='Nhập mô tả danh mục' />
@@ -62,7 +62,7 @@ const FormAddCategory: React.FC<IFormAddCategory> = ({ handleClose }) => {
                     <Form.Item
                         name="src"
                         label="Ảnh danh mục"
-                        rules={[{ required: true, message: 'Vui lòng chọn ảnh  danh mục!' }]}
+                        rules={[{ required: true, message: 'Vui lòng chọn ảnh danh mục!' }]}
                         style={{ display: 'inline-block', width: '90%' }}
                     >
                         <Input type="file" onChange={handleUpload} value={image} />
