@@ -46,7 +46,7 @@ const FormEditProduct: React.FC<IFormEditProduct> = ({ record, handleClose }) =>
     useEffect(() => {
         form.setFieldsValue(initialValues)
         setPreviewUrl(record?.src);
-    }, [record, form])
+    }, [record, form, initialValues, setPreviewUrl])
 
     const showNotification = useNotification();
     const [documentID, setDocumentID] = useState<string[]>([]);

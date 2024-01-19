@@ -10,14 +10,21 @@ import { useEffect } from 'react';
 import useStoreShop from '@/store/storeShop';
 
 export default function DetailPage({ params }: { params: { id: string } }) {
-    const { fetchCategory, fetchProducts, products } = useStoreShop();
+    const { fetchProducts, products } = useStoreShop();
 
     useEffect(() => {
-        fetchCategory();
         fetchProducts();
-    }, [fetchCategory, fetchProducts]);
+    }, [fetchProducts]);
 
     const data = products.find(product => product.code === params.id && product.status) as IProduct;
+
+    const viewedProductsString = localStorage.getItem('viewedProducts');
+    const viewedProducts = viewedProductsString ? JSON.parse(viewedProductsString) : [];
+
+    if (data && !viewedProducts.some((product: IProduct) => product.code === data.code)) {
+        viewedProducts.push(data);
+        localStorage.setItem('viewedProducts', JSON.stringify(viewedProducts));
+    }
 
     return (
         <>

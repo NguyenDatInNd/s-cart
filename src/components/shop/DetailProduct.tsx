@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Divider, Typography, Radio, Space } from 'antd';
 import Image from 'next/image'
@@ -17,6 +17,7 @@ import useTotalPrice from '@/app/hooks/useTotalPrice';
 import { useStoreCart } from '@/store/storeCart';
 import useQuantityInOrder from '@/app/hooks/useQuantity';
 import useNotification from '@/app/hooks/useNotification';
+import useStoreShop from '@/store/storeShop';
 
 enum QuantityChangeAction {
     Increase = "increase",

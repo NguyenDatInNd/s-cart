@@ -2,6 +2,7 @@ import { IFormValues, IOrder } from "@/interfaces";
 import { Card, Form, Input, Table, TableColumnsType } from "antd";
 import { useEffect, useMemo } from "react";
 import Image from "next/image";
+import { format } from "date-fns";
 
 interface IFormDetailOrder {
     record: IFormValues | undefined;
@@ -21,6 +22,7 @@ const FormDetailOrder: React.FC<IFormDetailOrder> = ({ record }) => {
             paymentMethod: record?.paymentMethod,
             orderCode: record?.orderCode,
             order: record?.order,
+            timestamp: format(new Date(record?.timestamp ?? new Date()), 'yyyy-MM-dd HH:mm:ss'),
         }
     }, [record])
 
@@ -116,6 +118,14 @@ const FormDetailOrder: React.FC<IFormDetailOrder> = ({ record }) => {
                     name="paymentMethod"
                     label="Phương thức thanh toán"
                     style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
+                >
+                    <Input disabled />
+                </Form.Item>
+
+                <Form.Item
+                    name='timestamp'
+                    label="Thời gian đặt hàng"
+                    style={{ display: 'inline-block', width: '100%' }}
                 >
                     <Input disabled />
                 </Form.Item>

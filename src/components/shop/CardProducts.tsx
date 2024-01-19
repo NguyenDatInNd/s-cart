@@ -9,7 +9,6 @@ import useNotification from '@/app/hooks/useNotification';
 import { useStoreCart } from '@/store/storeCart';
 import useQuantityInOrder from '@/app/hooks/useQuantity';
 import useSelectedOptions from '@/app/hooks/useSelectedOptions';
-import useTotalPrice from '@/app/hooks/useTotalPrice';
 const { Text } = Typography;
 
 interface ICardProductsProps extends IProduct {
