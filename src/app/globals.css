@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+header {
+  z-index: 5;
+}
+
+.ant-layout {
+  position: relative;
+}
+
 .ant-float-btn-body {
   background-color: #d9a1a3 !important;
   transition: background-color 0.5s ease;

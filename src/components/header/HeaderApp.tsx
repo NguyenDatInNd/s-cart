@@ -12,8 +12,8 @@ const HeaderApp: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
-        <header>
-            <nav className=' z-10 flex flex-row px-64 py-8 justify-between items-center bg-white w-full shadow-sm shadow-gray-500/35'>
+        <header className='sticky z-5 left-0 top-0'>
+            <nav className='flex flex-row px-64 py-8 justify-between items-center bg-white w-full shadow-sm shadow-gray-500/35'>
                 <Link className='subtext-footer' href="/">
                     <Image src="/icons/scart-mid.png" width={120} height={70} priority alt='scart-icon' />
                 </Link >
