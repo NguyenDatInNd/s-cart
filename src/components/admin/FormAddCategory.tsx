@@ -2,8 +2,8 @@ import { Button, Form, Input, Space } from "antd"
 import { db } from "@/firebase/firebase";
 import { addDoc, collection } from "firebase/firestore";
 import Image from "next/image";
-import useNotification from "@/app/hooks/useNotification";
-import useFileUpload from "@/app/hooks/useFileUpload";
+import useNotification from "@/hooks/useNotification";
+import useFileUpload from "@/hooks/useFileUpload";
 
 interface IFormAddCategory {
     handleClose: () => void;

@@ -5,10 +5,10 @@ import { ShoppingCartOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { AiOutlineSwap } from "react-icons/ai";
 import { IOrder, IProduct } from '@/interfaces';
-import useNotification from '@/app/hooks/useNotification';
+import useNotification from '@/hooks/useNotification';
 import { useStoreCart } from '@/store/storeCart';
-import useQuantityInOrder from '@/app/hooks/useQuantity';
-import useSelectedOptions from '@/app/hooks/useSelectedOptions';
+import useQuantityInOrder from '@/hooks/useQuantity';
+import useSelectedOptions from '@/hooks/useSelectedOptions';
 const { Text } = Typography;
 
 interface ICardProductsProps extends IProduct {

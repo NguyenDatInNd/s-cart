@@ -10,7 +10,7 @@ import Link from 'next/link';
 import BreadcrumbApp from '@/components/breadcrumb/BreadcrumbApp';
 import { useStoreCart } from '@/store/storeCart';
 import { IOrder, RenderProps } from '@/interfaces';
-import useNotification from '@/app/hooks/useNotification';
+import useNotification from '@/hooks/useNotification';
 
 const Cart: React.FC = () => {
     const showNotification = useNotification();

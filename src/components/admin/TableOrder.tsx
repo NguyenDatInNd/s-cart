@@ -4,10 +4,10 @@ import type { TableColumnsType } from 'antd';
 import { IFormValues } from '@/interfaces';
 import FormAddProduct from './FormAddProduct';
 import useStoreAdmin from '@/store/storeAdmin';
-import useDocumentIDsByCode from '@/app/hooks/useDocumentIDsByCode';
+import useDocumentIDsByCode from '@/hooks/useDocumentIDsByCode';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
-import useNotification from '@/app/hooks/useNotification';
+import useNotification from '@/hooks/useNotification';
 import FormDetailOrder from './FormDetailOrder';
 
 const TableOrder = () => {

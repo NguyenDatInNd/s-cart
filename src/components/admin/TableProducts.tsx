@@ -7,10 +7,10 @@ import Image from 'next/image';
 import useStoreShop from '@/store/storeShop';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
-import useNotification from '@/app/hooks/useNotification';
+import useNotification from '@/hooks/useNotification';
 import ModalProduct, { titleProduct } from './ModalProduct';
 import FormEditProduct from './FormEditProduct';
-import useDocumentIDsByCode from '@/app/hooks/useDocumentIDsByCode';
+import useDocumentIDsByCode from '@/hooks/useDocumentIDsByCode';
 
 const TableProducts = () => {
     const [isModal, setIsModal] = useState(false);

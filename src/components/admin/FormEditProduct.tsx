@@ -4,10 +4,10 @@ import { db } from "@/firebase/firebase";
 import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import useNotification from "@/app/hooks/useNotification";
+import useNotification from "@/hooks/useNotification";
 import useStoreShop from "@/store/storeShop";
 import { IProduct } from "@/interfaces";
-import useFileUpload from "@/app/hooks/useFileUpload";
+import useFileUpload from "@/hooks/useFileUpload";
 
 interface IFormEditProduct {
     handleClose: () => void;

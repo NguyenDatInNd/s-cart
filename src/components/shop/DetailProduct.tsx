@@ -12,12 +12,12 @@ import { FaGooglePlusG } from "react-icons/fa6";
 import RecommendProducts from './RecommendProducts';
 const { Text } = Typography;
 import { IOrder, IProduct } from '@/interfaces';
-import useSelectedOptions from '@/app/hooks/useSelectedOptions';
-import useTotalPrice from '@/app/hooks/useTotalPrice';
+import useSelectedOptions from '@/hooks/useSelectedOptions';
+import useTotalPrice from '@/hooks/useTotalPrice';
 import { useStoreCart } from '@/store/storeCart';
-import useQuantityInOrder from '@/app/hooks/useQuantity';
-import useNotification from '@/app/hooks/useNotification';
-import useStoreShop from '@/store/storeShop';
+import useQuantityInOrder from '@/hooks/useQuantity';
+import useNotification from '@/hooks/useNotification';
+import useLocalStorageCart from '@/hooks/useLocalStorageCart';
 
 enum QuantityChangeAction {
     Increase = "increase",

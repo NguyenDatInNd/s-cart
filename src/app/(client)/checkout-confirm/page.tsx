@@ -12,7 +12,7 @@ import { useStoreFormInfor } from '@/store/storeFormInfor';
 import { FaShippingFast } from 'react-icons/fa';
 import { MdOutlinePayment } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
-import useOrderCode from '@/app/hooks/useOrderCode';
+import useOrderCode from '@/hooks/useOrderCode';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 

@@ -6,11 +6,13 @@ const useNotification = () => {
   const showNotification = (
     type: NotificationType,
     message: string,
-    description: string
+    description: string,
+    duration?: number | null
   ) => {
     notification[type]({
       message,
       description,
+      duration,
     });
   };
 

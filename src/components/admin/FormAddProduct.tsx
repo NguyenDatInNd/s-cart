@@ -5,9 +5,9 @@ import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import useNotification from "@/app/hooks/useNotification";
+import useNotification from "@/hooks/useNotification";
 import useStoreShop from "@/store/storeShop";
-import useFileUpload from "@/app/hooks/useFileUpload";
+import useFileUpload from "@/hooks/useFileUpload";
 
 interface IFormAddProduct {
     handleClose: () => void;

@@ -5,10 +5,10 @@ import { ICategory } from '@/interfaces';
 import FormAddCategory from './FormAddCategory';
 import Image from 'next/image';
 import useStoreShop from '@/store/storeShop';
-import useDocumentIDsByCode from '@/app/hooks/useDocumentIDsByCode';
+import useDocumentIDsByCode from '@/hooks/useDocumentIDsByCode';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
-import useNotification from '@/app/hooks/useNotification';
+import useNotification from '@/hooks/useNotification';
 import ModalProduct, { titleCategory } from './ModalProduct';
 import FormEditCategory from './FormEditCategory';
 
