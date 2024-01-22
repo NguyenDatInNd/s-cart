@@ -6,10 +6,11 @@ const { Text } = Typography;
 import Image from 'next/image'
 import Link from 'next/link';
 import { IProduct } from '@/interfaces';
+import { Countdown, calculateCountdown } from '@/until/calculateCountdown';
 
 const ProductSale: React.FC<IProduct> = (props) => {
     const { price, amount, name, src, code, priceSale, id } = props;
-    const [countdown, setCountdown] = useState({
+    const [countdown, setCountdown] = useState<Countdown>({
         days: 0,
         hours: 0,
         minutes: 0,
@@ -20,19 +21,11 @@ const ProductSale: React.FC<IProduct> = (props) => {
         const targetDate = new Date('2024-12-31T23:59:59');
 
         const interval = setInterval(() => {
-            const now = new Date().getTime();
-            const distance = targetDate.getTime() - now;
+            const countdownResult = calculateCountdown(targetDate);
+            setCountdown(countdownResult);
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            setCountdown({ days, hours, minutes, seconds });
-
-            if (distance < 0) {
+            if (countdownResult.days === 0 && countdownResult.hours === 0 && countdownResult.minutes === 0 && countdownResult.seconds === 0) {
                 clearInterval(interval);
-                setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
             }
         }, 1000);
 

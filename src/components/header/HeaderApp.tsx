@@ -17,7 +17,7 @@ const HeaderApp: React.FC = () => {
         fetchProducts();
     }, [fetchProducts]);
 
-    const [searchResults, setSearchResults] = useState<IProduct[]>([]);
+    const [searchResults, setSearchResults] = useState<IProduct[]>(products);
 
     const handleSearch = (value: string) => {
         const results = products.filter((product) =>
@@ -75,7 +75,7 @@ const HeaderApp: React.FC = () => {
                     dataSource={searchResults}
                     renderItem={(product) => (
                         <List.Item onClick={() => setOpen(false)}>
-                            <Link href={`/detail/${product.code.replace(/\s+/g, '-').toLowerCase()}`}>
+                            <Link href={`/detail/${product.id?.replace(/\s+/g, '-').toLowerCase()}`}>
                                 <div className='flex gap-2 items-center text-base'>
                                     <Image src={product.src} alt={product.name} width={35} height={25} />
                                     {product.name}
