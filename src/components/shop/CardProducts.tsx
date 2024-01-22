@@ -51,11 +51,11 @@ const CardProducts: React.FC<ICardProductsProps> = ({ small, ...props }) => {
     return (
         <div className={`${small ? 'w-[195px]' : 'w-[255px] m-5'}  card-products relative px-5 pt-5 pb-10 bg-[#f5f5f5] rounded-md flex flex-col justify-between items-center`}>
 
-            <Link href={`/detail/${props.code.replace(/\s+/g, '-').toLowerCase()}`}>
+            <Link href={`/detail/${props.id?.replace(/\s+/g, '-').toLowerCase()}`}>
                 <Image className='mt-8' src={props.src} width={small ? 146 : 225} height={small ? 110 : 169} priority alt={props.name} />
             </Link>
 
-            <Link href={`/detail/${props.code.replace(/\s+/g, '-').toLowerCase()}`}>
+            <Link href={`/detail/${props.id?.replace(/\s+/g, '-').toLowerCase()}`}>
                 <Typography.Title className='mt-5 subtext-footer uppercase' level={5}>{props.name}</Typography.Title>
             </Link>
 

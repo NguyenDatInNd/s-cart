@@ -32,12 +32,12 @@ const RelatedProducts: React.FC = () => {
                     <Space size='small' direction='vertical'>
                         {specialProducts.slice(0, Math.min(4, specialProducts.length)).map(product => (
                             <div key={product?.code} className="flex gap-2 my-1">
-                                <Link className='ImageContainer' href={`/detail/${product?.code.replace(/\s+/g, '-').toLowerCase()}`}>
+                                <Link className='ImageContainer' href={`/detail/${product?.id?.replace(/\s+/g, '-').toLowerCase()}`}>
                                     <Image src={product?.src} width={106} height={104} alt={product?.name} />
                                 </Link>
 
                                 <Space className="justify-center" direction='vertical'>
-                                    <Link href={`/detail/${product?.code.replace(/\s+/g, '-').toLowerCase()}`} className="text-black">
+                                    <Link href={`/detail/${product?.id?.replace(/\s+/g, '-').toLowerCase()}`} className="text-black">
                                         <p className="subtext-footer capitalize ">{product?.name}</p>
                                     </Link>
 
@@ -60,12 +60,12 @@ const RelatedProducts: React.FC = () => {
                     <Space size='small' direction='vertical'>
                         {lastViewProducts.length > 0 && lastViewProducts.slice(0, Math.min(4, lastViewProducts.length)).map(product => (
                             <div key={product?.code} className="flex gap-2 my-1">
-                                <Link className='ImageContainer' href={`/detail/${product?.code.replace(/\s+/g, '-').toLowerCase()}`}>
+                                <Link className='ImageContainer' href={`/detail/${product?.id?.replace(/\s+/g, '-').toLowerCase()}`}>
                                     <Image src={product?.src} width={106} height={104} alt={product?.name} />
                                 </Link>
 
                                 <Space className="justify-center" direction='vertical'>
-                                    <Link href={`/detail/${product?.code.replace(/\s+/g, '-').toLowerCase()}`} className="text-black">
+                                    <Link href={`/detail/${product?.id?.replace(/\s+/g, '-').toLowerCase()}`} className="text-black">
                                         <p className="subtext-footer capitalize ">{product?.name}</p>
                                     </Link>
 

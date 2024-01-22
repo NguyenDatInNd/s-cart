@@ -11,6 +11,7 @@ export interface IProduct {
   status?: boolean;
   outstanding?: boolean;
   timestamp?: number;
+  id?: string;
 }
 
 interface IAttribute {

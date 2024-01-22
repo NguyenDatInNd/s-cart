@@ -1,13 +1,13 @@
 import { CloseOutlined, MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Select, Space, Switch } from "antd"
-import { db, storage } from "@/firebase/firebase";
-import { addDoc, collection } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { useEffect, useState } from "react";
+import { addDoc } from "firebase/firestore";
+import { useEffect } from "react";
 import Image from "next/image";
 import useNotification from "@/hooks/useNotification";
 import useStoreShop from "@/store/storeShop";
 import useFileUpload from "@/hooks/useFileUpload";
+import { v4 as uuidv4 } from 'uuid';
+
 
 interface IFormAddProduct {
     handleClose: () => void;
@@ -50,6 +50,7 @@ const FormAddProduct: React.FC<IFormAddProduct> = ({ handleClose }) => {
             priceSale: Array.isArray(values.priceSale) ? Number(values.priceSale[0]) ?? 0 : 0,
             attributes: values.attributes || [],
             timestamp: Date.now(),
+            id: uuidv4(),
         };
 
         addProduct(newProduct);

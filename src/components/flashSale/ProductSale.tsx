@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { IProduct } from '@/interfaces';
 
 const ProductSale: React.FC<IProduct> = (props) => {
-    const { price, amount, name, src, code, priceSale } = props;
+    const { price, amount, name, src, code, priceSale, id } = props;
     const [countdown, setCountdown] = useState({
         days: 0,
         hours: 0,
@@ -44,13 +44,13 @@ const ProductSale: React.FC<IProduct> = (props) => {
     return (
         <div className='flex flex-row h-64 w-[540px] rounded-3xl border-red-500 border-2'>
             <div className='flex items-center'>
-                <Link href={`/detail/${code.replace(/\s+/g, '-').toLowerCase()}`} key={code}>
+                <Link href={`/detail/${id?.replace(/\s+/g, '-').toLowerCase()}`} key={code}>
                     <Image className='w-[180px] h-[145px]' src={src} width={200} height={150} alt={name} />
                 </Link>
             </div>
 
             <div className='flex items-center justify-between flex-col flex-1 py-7 px-5'>
-                <Link href={`/detail/${code.replace(/\s+/g, '-').toLowerCase()}`} key={code}>
+                <Link href={`/detail/${id?.replace(/\s+/g, '-').toLowerCase()}`} key={code}>
                     <Typography.Title className='subtext-footer' level={4}>
                         {name}
                     </Typography.Title >

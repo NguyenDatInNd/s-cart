@@ -149,7 +149,6 @@ const Cart: React.FC = () => {
         showNotification('success', 'Item Deleted', `${record.product.name} has been deleted from the cart.`);
     };
 
-    console.log("order =>>", order)
     return (
         <div>
             <BreadcrumbApp />

@@ -10,8 +10,8 @@ const useFileUpload = (
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(record?.src);
   const [image, setImage] = useState<string | undefined>(record?.src);
 
-  const handleUpload = (event: any) => {
-    const file = event.target.files[0];
+  const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
 
     if (file) {
       const reader = new FileReader();
@@ -19,22 +19,21 @@ const useFileUpload = (
         setPreviewUrl(reader.result as string);
       };
       reader.readAsDataURL(file);
-    }
 
-    const storageRef = ref(storage, `/${position}/${file.name + Date.now()}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {},
-      (err) => console.log(err),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          setImage(url);
-          setPreviewUrl(URL.createObjectURL(file));
-        });
-      }
-    );
-    event.target.value = null;
+      const storageRef = ref(storage, `/${position}/${file.name + Date.now()}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (err) => console.log(err),
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            setImage(url);
+            setPreviewUrl(URL.createObjectURL(file));
+          });
+        }
+      );
+    }
   };
 
   return { previewUrl, image, handleUpload, setPreviewUrl };

@@ -16,7 +16,7 @@ export default function DetailPage({ params }: { params: { id: string } }) {
         fetchProducts();
     }, [fetchProducts]);
 
-    const data = products.find(product => product.code === params.id && product.status) as IProduct;
+    const data = products.find(product => product?.id === params.id && product.status) as IProduct;
 
     const viewedProductsString = localStorage.getItem('viewedProducts');
     const viewedProducts = viewedProductsString ? JSON.parse(viewedProductsString) : [];
@@ -33,7 +33,7 @@ export default function DetailPage({ params }: { params: { id: string } }) {
                 <h2 className='text-banner-detail uppercase'>{data?.name}</h2>
             </div>
 
-            <BreadcrumbApp />
+            <BreadcrumbApp props={data?.name} />
 
             <div className='px-[285px] py-28 bg-white' >
                 <div className='flex gap-10'>
