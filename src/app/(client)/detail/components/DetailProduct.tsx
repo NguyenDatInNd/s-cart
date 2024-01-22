@@ -17,7 +17,6 @@ import useTotalPrice from '@/hooks/useTotalPrice';
 import { useStoreCart } from '@/store/storeCart';
 import useQuantityInOrder from '@/hooks/useQuantity';
 import useNotification from '@/hooks/useNotification';
-import useLocalStorageCart from '@/hooks/useLocalStorageCart';
 
 enum QuantityChangeAction {
     Increase = "increase",

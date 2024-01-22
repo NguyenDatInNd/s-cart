@@ -1,8 +1,8 @@
 'use client'
 
-import TableCategory from "@/components/admin/TableCategory";
-import TableOrder from "@/components/admin/TableOrder";
-import TableProducts from "@/components/admin/TableProducts";
+import TableCategory from "@/app/(client)/admin/category/TableCategory";
+import TableOrder from "@/app/(client)/admin/order/TableOrder";
+import TableProducts from "@/app/(client)/admin/products/TableProducts";
 import { auth } from "@/firebase/firebase";
 import useNotification from "@/hooks/useNotification";
 import { Button, Dropdown, Layout, Menu, MenuProps, Spin, Tabs, theme } from "antd";

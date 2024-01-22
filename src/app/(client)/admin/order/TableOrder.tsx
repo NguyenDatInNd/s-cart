@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Modal, Popconfirm, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { IFormValues } from '@/interfaces';
-import FormAddProduct from './FormAddProduct';
+import FormAddProduct from '../products/FormAddProduct';
 import useStoreAdmin from '@/store/storeAdmin';
 import useDocumentIDsByCode from '@/hooks/useDocumentIDsByCode';
 import { deleteDoc, doc } from 'firebase/firestore';
@@ -120,7 +120,7 @@ const TableOrder = () => {
                     okText='Yes'
                     cancelText="No"
                 >
-                    <Button type="primary" danger>Xóa</Button>
+                    <Button disabled={selectedRowKeys.length === 0} type="primary" danger>Xóa</Button>
                 </Popconfirm>
             </div>
 

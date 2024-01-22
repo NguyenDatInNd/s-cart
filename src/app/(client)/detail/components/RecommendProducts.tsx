@@ -1,7 +1,7 @@
 'use client'
 
 import { Typography, Space } from 'antd';
-import CardProducts from '../shop/CardProducts';
+import CardProducts from '../../../../components/shop/CardProducts';
 import useStoreShop from '@/store/storeShop';
 import { useEffect } from 'react';
 

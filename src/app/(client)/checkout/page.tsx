@@ -14,7 +14,7 @@ import { TbNotes } from "react-icons/tb";
 import { RiCoupon3Fill } from "react-icons/ri";
 import { FaShippingFast } from "react-icons/fa";
 import { MdOutlinePayment } from "react-icons/md";
-import { countries } from '@/components/country';
+import { countries } from '@/data/country';
 import { IFormValues, IOrder, RenderProps } from '@/interfaces';
 import { useStoreCart } from '@/store/storeCart';
 import { useStoreFormInfor } from '@/store/storeFormInfor';

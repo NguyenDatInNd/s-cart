@@ -1,13 +1,13 @@
 'use client'
 
 import Image from 'next/image'
-import DetailProduct from '@/components/shop/DetailProduct';
-import RelatedProducts from '@/components/shop/RelatedProducts';
 import Review from '@/components/review/Review';
 import BreadcrumbApp from '@/components/breadcrumb/BreadcrumbApp';
 import { IProduct } from '@/interfaces';
 import { useEffect } from 'react';
 import useStoreShop from '@/store/storeShop';
+import RelatedProducts from '../components/RelatedProducts';
+import DetailProduct from '../components/DetailProduct';
 
 export default function DetailPage({ params }: { params: { id: string } }) {
     const { fetchProducts, products } = useStoreShop();

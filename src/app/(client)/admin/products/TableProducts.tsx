@@ -8,7 +8,7 @@ import useStoreShop from '@/store/storeShop';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import useNotification from '@/hooks/useNotification';
-import ModalProduct, { titleProduct } from './ModalProduct';
+import ModalProduct, { titleProduct } from '../../../../components/admin/ModalProduct';
 import FormEditProduct from './FormEditProduct';
 import useDocumentIDsByCode from '@/hooks/useDocumentIDsByCode';
 
@@ -136,7 +136,7 @@ const TableProducts = () => {
                     okText='Yes'
                     cancelText="No"
                 >
-                    <Button type="primary" danger>Xóa</Button>
+                    <Button disabled={selectedRowKeys.length === 0} type="primary" danger>Xóa</Button>
                 </Popconfirm>
             </div>
 

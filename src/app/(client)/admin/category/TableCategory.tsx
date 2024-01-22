@@ -9,7 +9,7 @@ import useDocumentIDsByCode from '@/hooks/useDocumentIDsByCode';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import useNotification from '@/hooks/useNotification';
-import ModalProduct, { titleCategory } from './ModalProduct';
+import ModalProduct, { titleCategory } from '../../../../components/admin/ModalProduct';
 import FormEditCategory from './FormEditCategory';
 
 const TableCategory = () => {
@@ -100,7 +100,7 @@ const TableCategory = () => {
                     okText='Yes'
                     cancelText="No"
                 >
-                    <Button type="primary" danger>Xóa</Button>
+                    <Button disabled={selectedRowKeys.length === 0} type="primary" danger>Xóa</Button>
                 </Popconfirm>
             </div>
 
