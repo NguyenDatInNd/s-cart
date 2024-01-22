@@ -1,14 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Popconfirm, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { IFormValues } from '@/interfaces';
-import FormAddProduct from '../products/FormAddProduct';
 import useStoreAdmin from '@/store/storeAdmin';
-import useDocumentIDsByCode from '@/hooks/useDocumentIDsByCode';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import useNotification from '@/hooks/useNotification';
 import FormDetailOrder from './FormDetailOrder';
+import { getDocumentIDsByCode } from '@/hooks/useDocumentIDsByCode';
 
 const TableOrder = () => {
     const [isModal, setIsModal] = useState(false);
@@ -84,30 +83,34 @@ const TableOrder = () => {
         onChange: onSelectChange,
     };
 
-    const codeSelected = useMemo(() => {
-        return data
-            .filter((item) => selectedRowKeys.includes(item.key))
-            .map((item) => item.orderCode);
-    }, [data, selectedRowKeys]);
-
-    const documentIDs = useDocumentIDsByCode(codeSelected.filter((orderCode) => orderCode !== undefined) as string[], 'order', 'orderCode');
-
     const handleDeleteOrder = async () => {
         try {
+            const selectedCode = data
+                .filter((item: IFormValues & { key: number }) =>
+                    selectedRowKeys.includes(item.key)
+                )
+                .map((item: IFormValues) => item.orderCode);
+
+            const documentIDs = await getDocumentIDsByCode({
+                selectedCode,
+                targetTable: "order",
+                params: "orderCode",
+            });
+
             const batch: Promise<void>[] = [];
-            documentIDs.forEach((documentID) => {
-                const documentRef = doc(db, 'order', documentID);
+            documentIDs.forEach((documentID: string) => {
+                const documentRef = doc(db, "order", documentID);
                 batch.push(deleteDoc(documentRef));
             });
 
             await Promise.all(batch);
-            showNotification('success', 'Order deleted', '');
+            showNotification("success", "Order deleted", "");
             setSelectedRowKeys([]);
             fetchForm();
         } catch (error) {
-            console.error('Error deleting documents:', error);
+            console.error("Error deleting documents:", error);
         }
-    }
+    };
 
     return (
         <div className='my-5 mx-10' >

@@ -1,16 +1,17 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Popconfirm, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { ICategory } from '@/interfaces';
 import FormAddCategory from './FormAddCategory';
 import Image from 'next/image';
 import useStoreShop from '@/store/storeShop';
-import useDocumentIDsByCode from '@/hooks/useDocumentIDsByCode';
+// import useDocumentIDsByCode from '@/hooks/useDocumentIDsByCode';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import useNotification from '@/hooks/useNotification';
 import ModalProduct, { titleCategory } from '../../../../components/admin/ModalProduct';
 import FormEditCategory from './FormEditCategory';
+import { getDocumentIDsByCode } from '@/hooks/useDocumentIDsByCode';
 
 const TableCategory = () => {
     const [isModal, setIsModal] = useState(false);
@@ -63,30 +64,33 @@ const TableCategory = () => {
         onChange: onSelectChange,
     };
 
-    const codeSelected = useMemo(() => {
-        return data
-            .filter((item) => selectedRowKeys.includes(item.key))
-            .map((item) => item.name);
-    }, [data, selectedRowKeys]);
-
-    const documentIDs = useDocumentIDsByCode(codeSelected, 'category', 'name');
-
     const handleDeleteCategory = async () => {
         try {
+            const selectedCode = data
+                .filter((item: ICategory & { key: number }) =>
+                    selectedRowKeys.includes(item.key)
+                )
+                .map((item: ICategory) => item.name);
+
+            const documentIDs = await getDocumentIDsByCode({
+                selectedCode,
+                targetTable: "category",
+                params: "name",
+            });
             const batch: Promise<void>[] = [];
-            documentIDs.forEach((documentID) => {
-                const documentRef = doc(db, 'category', documentID);
+            documentIDs.forEach((documentID: string) => {
+                const documentRef = doc(db, "category", documentID);
                 batch.push(deleteDoc(documentRef));
             });
 
             await Promise.all(batch);
-            showNotification('success', 'Category deleted', '');
+            showNotification("success", "Category deleted", "");
             setSelectedRowKeys([]);
             fetchCategory();
         } catch (error) {
-            console.error('Error deleting documents:', error);
+            console.error("Error deleting documents:", error);
         }
-    }
+    };
 
     return (
         <div className='my-5 mx-10' >

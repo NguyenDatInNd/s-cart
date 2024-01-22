@@ -10,7 +10,8 @@ import { db } from '@/firebase/firebase';
 import useNotification from '@/hooks/useNotification';
 import ModalProduct, { titleProduct } from '../../../../components/admin/ModalProduct';
 import FormEditProduct from './FormEditProduct';
-import useDocumentIDsByCode from '@/hooks/useDocumentIDsByCode';
+import { getDocumentIDsByCode } from '@/hooks/useDocumentIDsByCode';
+// import useDocumentIDsByCode from '@/hooks/useDocumentIDsByCode';
 
 const TableProducts = () => {
     const [isModal, setIsModal] = useState(false);
@@ -94,30 +95,34 @@ const TableProducts = () => {
         onChange: onSelectChange,
     };
 
-    const codeSelected = useMemo(() => {
-        return data
-            .filter((item) => selectedRowKeys.includes(item.key))
-            .map((item) => item.code);
-    }, [data, selectedRowKeys]);
-
-    const documentIDs = useDocumentIDsByCode(codeSelected, 'products', 'code');
-
     const handleDeleteProduct = async () => {
         try {
+            const selectedCode = data
+                .filter((item: IProduct & { key: number }) =>
+                    selectedRowKeys.includes(item.key)
+                )
+                .map((item: IProduct) => item.code);
+
+            const documentIDs = await getDocumentIDsByCode({
+                selectedCode,
+                targetTable: "products",
+                params: "code",
+            });
+
             const batch: Promise<void>[] = [];
-            documentIDs.forEach((documentID) => {
-                const documentRef = doc(db, 'products', documentID);
+            documentIDs.forEach((documentID: string) => {
+                const documentRef = doc(db, "products", documentID);
                 batch.push(deleteDoc(documentRef));
             });
 
             await Promise.all(batch);
-            showNotification('success', 'Product deleted', '');
+            showNotification("success", "Product deleted", "");
             setSelectedRowKeys([]);
             fetchProducts();
         } catch (error) {
-            console.error('Error deleting documents:', error);
+            console.error("Error deleting documents:", error);
         }
-    }
+    };
 
     return (
         <div className='my-5 mx-10' >
