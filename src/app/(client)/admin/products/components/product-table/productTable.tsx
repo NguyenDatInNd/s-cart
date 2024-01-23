@@ -15,7 +15,7 @@ const columns: TableColumnsType<IProduct> = [
     {
         title: 'Số thứ tự',
         dataIndex: 'key',
-        render: (key: number) => <p>{key}</p>
+        render: (key: number) => <p>{key + 1}</p>
     },
     {
         title: 'Hình ảnh',
@@ -131,7 +131,7 @@ const ProductTable = () => {
                     okText="Yes"
                     cancelText="No"
                 >
-                    <Button type="primary" danger>
+                    <Button disabled={selectedRowKeys.length === 0} type="primary" danger>
                         Xóa
                     </Button>
                 </Popconfirm>

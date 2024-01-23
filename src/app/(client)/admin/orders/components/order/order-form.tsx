@@ -1,8 +1,7 @@
 "use client";
 
-import useFileUpload from "@/hooks/useFileUpload";
-import { IFormValues, IOrder } from "@/interfaces";
-import { Button, Card, Form, Input, Space, Table, TableColumnsType, Upload } from "antd";
+import { IOrder } from "@/interfaces";
+import { Card, Form, Input, Table, TableColumnsType } from "antd";
 import Image from "next/image";
 import { useEffect } from "react";
 
@@ -38,23 +37,23 @@ const columns: TableColumnsType<IOrder> = [
 ];
 
 export interface OrderFormValues {
-    orderCode: string;
-    full_name: string;
-    email: string;
-    phone: string;
-    country: string;
-    note: string;
+    orderCode?: string;
+    full_name?: string;
+    email?: string;
+    phone?: string;
+    country?: string;
+    note?: string;
     order?: IOrder[];
-    address: string;
-    appliedCoupon: number;
+    appliedCoupon?: string;
+    address?: string;
     timestamp?: number;
-    total: number;
-    shippingMethod: string;
-    paymentMethod: string;
-    status: boolean;
-    id: string;
-    first_name: string;
-    last_name: string;
+    total?: number;
+    shippingMethod?: string;
+    paymentMethod?: string;
+    status?: boolean;
+    id?: string;
+    first_name?: string;
+    last_name?: string;
 }
 
 interface Props { initialValues: OrderFormValues }

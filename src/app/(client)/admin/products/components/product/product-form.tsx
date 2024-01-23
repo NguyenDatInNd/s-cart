@@ -55,6 +55,9 @@ const ProductForm: React.FC<Props> = ({
         label: item.name,
         value: item.name,
     }));
+
+    console.log("initialValues ==>>", initialValues)
+
     return (
         <div>
             <Form
@@ -63,14 +66,15 @@ const ProductForm: React.FC<Props> = ({
                     {
                         ...values,
                         src: image,
-                        status: true,
+                        status: values.status ?? true,
                         amount: Number(values.amount),
                         price: Number(values.price),
                         outstanding: values.outstanding ?? false,
-                        priceSale: Array.isArray(values.priceSale) ? Number(values.priceSale[0]) ?? 0 : 0,
+                        priceSale: (Array.isArray(values.priceSale) && values.priceSale.length > 0)
+                            ? Number(values.priceSale[0]) || 0 : 0,
                         attributes: values.attributes || [],
-                        timestamp: Date.now(),
-                        id: uuid(),
+                        timestamp: values.timestamp || Date.now(),
+                        id: values.id || uuid(),
                     }
                 )}
                 layout="vertical"

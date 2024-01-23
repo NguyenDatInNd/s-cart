@@ -37,7 +37,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             const querySnapshot = await getDocs(queryString);
             const documentID = querySnapshot.docs.map((doc) => doc.id);
 
-            const documentRef = doc(db, "product", documentID[0]);
+            const documentRef = doc(db, "products", documentID[0]);
             await updateDoc(documentRef, product);
             showNotification(
                 "success",
@@ -45,6 +45,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 `Updated ${product.name} to shop`
             );
         } catch (error) {
+            console.error("Error updating document:", error);
             showNotification("error", "Updated this product failed", `${error}`);
         }
     };
@@ -62,12 +63,16 @@ export default function Page({ params }: { params: { slug: string } }) {
                 ?.find(
                     (doc) => doc.id === params.slug
                 ) as IProduct;
-            setRecordDetail(data);
+
+            const updateData = {
+                ...data,
+                priceSale: Number(data?.priceSale) ? [data?.priceSale] : [],
+                category: data?.category ?? '',
+            }
+            setRecordDetail(updateData);
         };
         getProductByID();
     }, [params.slug]);
-
-    console.log("recordDetail ==>>", recordDetail)
 
     return (
         <Modal

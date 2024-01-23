@@ -34,8 +34,6 @@ const ProductAddModal: React.FC = () => {
         handleClose();
     };
 
-    console.log("ProductAddModal");
-
     return (
         <Modal
             title="Thêm sản phẩm"

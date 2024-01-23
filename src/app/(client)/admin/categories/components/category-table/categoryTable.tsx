@@ -103,7 +103,7 @@ const CategoryTable = () => {
           okText="Yes"
           cancelText="No"
         >
-          <Button type="primary" danger>
+          <Button disabled={selectedRowKeys.length === 0} type="primary" danger>
             Xóa
           </Button>
         </Popconfirm>

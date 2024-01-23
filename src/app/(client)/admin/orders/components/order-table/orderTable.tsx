@@ -49,7 +49,7 @@ const columns: TableColumnsType<IFormValues> = [
     {
         title: 'Thao tác',
         render: (_: string, record: IFormValues) => (
-            <Link href={`/admin/order/view/${record.id}`}>Xem</Link>
+            <Link href={`/admin/orders/view/${record.id}`}>Xem</Link>
         ),
     }
 ];
@@ -120,7 +120,7 @@ const OrderTable = () => {
                     okText="Yes"
                     cancelText="No"
                 >
-                    <Button type="primary" danger>
+                    <Button disabled={selectedRowKeys.length === 0} type="primary" danger>
                         Xóa
                     </Button>
                 </Popconfirm>
