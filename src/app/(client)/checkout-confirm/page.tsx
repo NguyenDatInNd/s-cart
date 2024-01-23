@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import useOrderCode from '@/hooks/useOrderCode';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
+import { v4 as uuid } from 'uuid';
 
 enum PaymentMethod {
     Cash = 'cash',
@@ -46,10 +47,9 @@ const CheckoutConfirm: React.FC = () => {
             note: form.note ?? '',
             total: form.total + form.total * 0.1 - form.appliedCoupon,
             order: order.products,
-            full_name: `${form.first_name} ${form.last_name}`
+            full_name: `${form.first_name} ${form.last_name}`,
+            id: uuid()
         }
-
-        // console.log(newForm);
 
         addOrder(newForm)
     }

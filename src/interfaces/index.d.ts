@@ -50,6 +50,7 @@ export interface IFormValues {
   paymentMethod: string;
   timestamp?: number;
   orderCode?: string;
+  id?: string;
 }
 
 export interface ICategory {
@@ -57,6 +58,7 @@ export interface ICategory {
   src: string;
   description: string;
   status: boolean;
+  id: string;
 }
 
 export interface AttributeOption {

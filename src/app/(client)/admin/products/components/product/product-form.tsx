@@ -1,71 +1,81 @@
-import { CloseOutlined, MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input, Select, Space, Switch } from "antd"
-import { addDoc } from "firebase/firestore";
-import { useEffect } from "react";
-import Image from "next/image";
-import useNotification from "@/hooks/useNotification";
-import useStoreShop from "@/store/storeShop";
+"use client";
+
 import useFileUpload from "@/hooks/useFileUpload";
-import { v4 as uuidv4 } from 'uuid';
+import { ICategory, IProduct } from "@/interfaces";
+import useStoreShop from "@/store/storeShop";
+import { CloseOutlined, MinusCircleOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { Button, Card, Form, Input, Select, Space, Switch, Upload } from "antd";
+import Image from "next/image";
+import { useEffect } from "react";
+import { v4 as uuid } from "uuid";
 
-
-interface IFormAddProduct {
-    handleClose: () => void;
+export interface ProductFormValues {
+    name?: string;
+    code?: string;
+    category?: string;
+    amount?: number;
+    price?: number;
+    priceSale?: number;
+    attributes?: string;
+    description?: string;
+    outstanding?: boolean;
+    src?: string;
+    status?: boolean;
 }
 
-const FormAddProduct: React.FC<IFormAddProduct> = ({ handleClose }) => {
+interface Props {
+    handleClose: () => void;
+    onFinish: (values: ProductFormValues) => void;
+    initialValues: ProductFormValues;
+}
+
+const ProductForm: React.FC<Props> = ({
+    handleClose,
+    onFinish,
+    initialValues,
+}) => {
     const [form] = Form.useForm();
-    const { category, fetchCategory, docProductsRef } = useStoreShop();
-    const { previewUrl, image, handleUpload, setPreviewUrl } = useFileUpload('products', undefined);
+    const { category, fetchCategory } = useStoreShop();
+    const { previewUrl, image, handleUpload } = useFileUpload(
+        "products",
+        initialValues as IProduct
+    );
+
+    useEffect(() => {
+        if (initialValues?.name) {
+            form.setFieldsValue(initialValues);
+        }
+    }, [form, initialValues]);
 
     useEffect(() => {
         fetchCategory();
     }, [fetchCategory]);
 
-    const showNotification = useNotification();
-
-    const addProduct = async (product: any) => {
-        try {
-            await addDoc(docProductsRef, product);
-            showNotification('success', 'Add new product successfully', `Added ${product.name} to shop`);
-        } catch (error) {
-            console.log(error);
-            showNotification('error', 'Add new product failed', `${error}`);
-        }
-    }
-
     const options = category.map((item) => ({
         label: item.name,
         value: item.name,
     }));
-
-    const onFinish = (values: any) => {
-        const newProduct = {
-            ...values,
-            src: image,
-            status: true,
-            amount: Number(values.amount),
-            price: Number(values.price),
-            outstanding: values.outstanding ?? false,
-            priceSale: Array.isArray(values.priceSale) ? Number(values.priceSale[0]) ?? 0 : 0,
-            attributes: values.attributes || [],
-            timestamp: Date.now(),
-            id: uuidv4(),
-        };
-
-        addProduct(newProduct);
-        handleClose();
-        form.resetFields();
-        setPreviewUrl('');
-    };
-
     return (
         <div>
             <Form
                 form={form}
-                onFinish={onFinish}
-                layout='vertical'
+                onFinish={(values) => onFinish(
+                    {
+                        ...values,
+                        src: image,
+                        status: true,
+                        amount: Number(values.amount),
+                        price: Number(values.price),
+                        outstanding: values.outstanding ?? false,
+                        priceSale: Array.isArray(values.priceSale) ? Number(values.priceSale[0]) ?? 0 : 0,
+                        attributes: values.attributes || [],
+                        timestamp: Date.now(),
+                        id: uuid(),
+                    }
+                )}
+                layout="vertical"
                 requiredMark={false}
+                initialValues={initialValues}
             >
                 <Form.Item
                     name="name"
@@ -167,12 +177,24 @@ const FormAddProduct: React.FC<IFormAddProduct> = ({ handleClose }) => {
                         rules={[{ required: true, message: 'Vui lòng chọn ảnh sản phẩm!' }]}
                         style={{ display: 'inline-block', width: '90%' }}
                     >
-                        <Input type="file" onChange={handleUpload} value={image} />
+                        <Upload
+                            onChange={handleUpload}
+                            showUploadList={false}
+                            multiple={false}
+                            listType="picture"
+                        >
+                            <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                        </Upload>
                     </Form.Item>
 
-                    {previewUrl &&
-                        <Image src={previewUrl} alt="Preview" width={250} height={200} />
-                    }
+                    {(previewUrl || initialValues?.src) && (
+                        <Image
+                            src={previewUrl || (initialValues?.src as string)}
+                            alt="Preview"
+                            width={250}
+                            height={200}
+                        />
+                    )}
                 </Space>
 
                 <Form.Item
@@ -242,20 +264,19 @@ const FormAddProduct: React.FC<IFormAddProduct> = ({ handleClose }) => {
                     <Button
                         onClick={() => {
                             handleClose();
-                            form.resetFields();
-                            setPreviewUrl('');
                         }}
-                        className="mr-5">
+                        className="mr-5"
+                    >
                         Hủy
                     </Button>
 
                     <Button type="primary" htmlType="submit">
-                        Thêm sản phẩm
+                        {initialValues?.src ? "Cập nhật sản phẩm" : "Thêm sản phẩm"}
                     </Button>
                 </Form.Item>
             </Form>
         </div>
-    )
-}
+    );
+};
 
-export default FormAddProduct
+export default ProductForm;

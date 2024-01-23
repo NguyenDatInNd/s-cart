@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.ant-tabs-content-holder {
+  overflow: scroll;
+}
+
 header {
   z-index: 5;
 }
